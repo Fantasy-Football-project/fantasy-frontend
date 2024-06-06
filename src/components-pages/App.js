@@ -23,7 +23,7 @@ function App() {
   const onLogin = (event, username, password) => {
     event.preventDefault();
 
-    //using the axios helper method
+    //using the axios helper method - .then/.catch is a try catch
     request(
       "POST",
       "/login",
