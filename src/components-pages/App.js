@@ -5,7 +5,7 @@ import logo from '../logo.svg';
 import WelcomePage from './WelcomePage';
 import AuthContent from './AuthContent';
 import LoginForm from './LoginForm';
-import request from '../axios_helper';
+import { request , setAuthToken } from "../axios_helper";
 
 function App() {
   
@@ -30,6 +30,7 @@ function App() {
       {login: username, password: password}
     ).then((response) => {
       setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
+      setAuthToken(response.data.token);
     }).catch((error) => {
       setComponentToShow("welcome");
     });
@@ -45,6 +46,7 @@ function App() {
       {firstName: firstName, lastName: lastName, login: username, password: password}
     ).then((response) => {
       setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
+      setAuthToken(response.data.token);
     }).catch((error) => {
       setComponentToShow("welcome");
     });
