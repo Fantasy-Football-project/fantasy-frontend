@@ -19,7 +19,7 @@ export const setAuthToken = ( token ) => {
 }
 
 export const request = (method, url, data) => {
-    const headers = {};
+    let headers = {};
     if (getAuthToken() !== null && getAuthToken() !== "null"){
         headers = {"Authorization": `Bearer ${getAuthToken()}`};
     }
