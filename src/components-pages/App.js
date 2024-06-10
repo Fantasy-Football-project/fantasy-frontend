@@ -1,11 +1,13 @@
 //Overall file.
 import React , { useState , useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 import './App.css';
 import logo from '../logo.svg';
 import WelcomePage from './WelcomePage';
 import AuthContent from './AuthContent';
 import LoginForm from './LoginForm';
 import { request , setAuthToken } from "../axios_helper";
+import CreateLeague from './CreateLeague';
 
 function App() {
   
@@ -20,6 +22,11 @@ function App() {
     setComponentToShow("welcome");
   };
 
+  const addLeague = () => {
+    setComponentToShow("createLeague");
+  }
+
+  //Calling the login function in the backend.
   const onLogin = (event, username, password) => {
     event.preventDefault();
 
@@ -63,26 +70,24 @@ function App() {
     });
   };
   
-  return (
-    <div>
-      <h1 className='text-center'>Fantasy Football Registration</h1>
-      <br />
-      <div className='container-fluid'>
-        <div className='row'>
-          <div className='col'>
-            {componentToShow === "welcome" && <WelcomePage />}
-            {componentToShow === "authorizedContent" && <AuthContent />}
-            {componentToShow === "login" && <LoginForm onLogin={onLogin} onRegister={onRegister}/>}
-            <div className='row justify-content-center'>
-              <div className='col-1'>
-                <button className="btn btn-primary" style={{margin: "5px"}} onClick={() => setComponentToShow("login")}>Login</button>
-                <button className="btn btn-dark" onClick={() => setComponentToShow("welcome")}>Logout</button>
-              </div>
+  //Router creates links for each page and sends user to the specified links based on the button pressed on WelcomePageContent.
+  return (    
+    <Router>
+      <div>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col'>
+              <Routes>
+                <Route path="/" element={<WelcomePage />} />
+                <Route path="/authorizedContent" element={<AuthContent/>} />
+                <Route path="/login" element={<LoginForm onLogin={onLogin} onRegister={onRegister}/>} />
+                <Route path="/createLeague" element={<CreateLeague/>} />
+              </Routes>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Router>
   );
 }
 
