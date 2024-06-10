@@ -39,16 +39,27 @@ function App() {
   const onRegister = (event, firstName, lastName, username, password) => {
     event.preventDefault();
 
+    const requestData = {
+      firstName: firstName,
+      lastName: lastName,
+      login: username,
+      password: password
+    };
+
+    console.log("Register Request Data:", requestData);
+
     //using the axios helper method
     request(
       "POST",
       "/register",
       {firstName: firstName, lastName: lastName, login: username, password: password}
     ).then((response) => {
+      console.log('Registration successful, response:', response);
       setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
       setAuthToken(response.data.token);
     }).catch((error) => {
       setComponentToShow("welcome");
+      console.error('Registration error:', error);
     });
   };
   

@@ -9,7 +9,7 @@ export const getAuthToken = () => {
 }
 
 export const setAuthToken = ( token ) => {
-    if (token !== null) {
+    if (token) {
         window.localStorage.setItem("auth_token", token);
     }
     else {
@@ -19,10 +19,19 @@ export const setAuthToken = ( token ) => {
 }
 
 export const request = (method, url, data) => {
-    let headers = {};
+    //let headers = {};
+    let headers = {
+        "Content-Type": "application/json"
+    };
+
     if (getAuthToken() !== null && getAuthToken() !== "null"){
         headers = {"Authorization": `Bearer ${getAuthToken()}`};
+        //headers["Authorization"] = `Bearer ${getAuthToken()}`;
     }
+
+    /*if (getAuthToken() !== null && getAuthToken() !== "null" && !url.includes("/register") && !url.includes("/login")) {
+        headers["Authorization"] = `Bearer ${getAuthToken()}`;
+    }*/
 
     return axios({
         method: method,
@@ -31,5 +40,3 @@ export const request = (method, url, data) => {
         headers: headers
     })
 }
-
-//export default request;
