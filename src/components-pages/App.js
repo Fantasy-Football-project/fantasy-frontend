@@ -20,14 +20,14 @@ function App() {
     setComponentToShow("welcome");
   };
 
-  const onLogin = (event, username, password) => {
+  const onLogin = (event, email, password) => {
     event.preventDefault();
 
     //using the axios helper method - .then/.catch is a try catch
     request(
       "POST",
       "/login",
-      {login: username, password: password}
+      {email: email, password: password}
     ).then((response) => {
       setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
       setAuthToken(response.data.token);
@@ -36,14 +36,14 @@ function App() {
     });
   };
 
-  const onRegister = (event, firstName, lastName, username, password) => {
+  const onRegister = (event, firstName, lastName, email, password) => {
     event.preventDefault();
 
     //using the axios helper method
     request(
       "POST",
       "/register",
-      {firstName: firstName, lastName: lastName, login: username, password: password}
+      {firstName: firstName, lastName: lastName, email: email, password: password}
     ).then((response) => {
       setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
       setAuthToken(response.data.token);
