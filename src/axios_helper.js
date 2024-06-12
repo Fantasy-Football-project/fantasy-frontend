@@ -20,8 +20,9 @@ export const setAuthToken = ( token ) => {
 
 export const request = (method, url, data) => {
     let headers = {};
-    if (getAuthToken() !== null && getAuthToken() !== "null"){
-        headers = {"Authorization": `Bearer ${getAuthToken()}`};
+    const token = getAuthToken();
+    if (token) {
+        headers = {"Authorization": `Bearer ${token}`};
     }
 
     return axios({
@@ -29,7 +30,7 @@ export const request = (method, url, data) => {
         url: url,
         data: data,
         headers: headers
-    })
+    });
 }
 
 //export default request;

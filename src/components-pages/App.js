@@ -48,6 +48,7 @@ function App() {
       setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
       setAuthToken(response.data.token);
     }).catch((error) => {
+      console.error(error.response.data)
       setComponentToShow("welcome");
     });
   };
