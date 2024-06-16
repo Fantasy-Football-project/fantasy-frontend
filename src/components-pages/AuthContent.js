@@ -1,7 +1,7 @@
 //This file is the protected content that needs authentication
 
 import React , { useState, useEffect } from "react";
-import { request , setAuthToken } from "../axios_helper";
+import { request } from "../axios_helper";
 
 const AuthContent = () => {
     const [data, setData] = useState([]);

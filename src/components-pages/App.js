@@ -1,25 +1,28 @@
 //Overall file.
 import React , { useState , useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate} from 'react-router-dom';
 import './App.css';
 import logo from '../logo.svg';
 import WelcomePage from './WelcomePage';
 import AuthContent from './AuthContent';
 import LoginForm from './LoginForm';
-import { request , setAuthToken } from "../axios_helper";
+import { request } from "../axios_helper";
 import CreateLeague from './CreateLeague';
 
 function App() {
   
   //this variable is to figure out which content to display (based on if the user is logged in or not)
   const[componentToShow, setComponentToShow] = useState("welcome");
+  const navigate = useNavigate();
 
   const login = () => {
     setComponentToShow("login"); //if user is logged in, the variable is set to "login", and back to "welcome" if the user logs out
   };
 
   const logout = () => {
-    setComponentToShow("welcome");
+    request("POST", "/logout")
+      .then(() => setComponentToShow("welcome"))
+      .catch(error => console.error('Logout error:', error));
   };
 
   const addLeague = () => {
@@ -36,8 +39,8 @@ function App() {
       "/login",
       {login: username, password: password}
     ).then((response) => {
-      setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
-      setAuthToken(response.data.token);
+      //setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
+      navigate("/authorizedContent");
     }).catch((error) => {
       setComponentToShow("welcome");
     });
@@ -46,15 +49,6 @@ function App() {
   const onRegister = (event, firstName, lastName, username, password) => {
     event.preventDefault();
 
-    const requestData = {
-      firstName: firstName,
-      lastName: lastName,
-      login: username,
-      password: password
-    };
-
-    console.log("Register Request Data:", requestData);
-
     //using the axios helper method
     request(
       "POST",
@@ -62,8 +56,8 @@ function App() {
       {firstName: firstName, lastName: lastName, login: username, password: password}
     ).then((response) => {
       console.log('Registration successful, response:', response);
-      setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
-      setAuthToken(response.data.token);
+      //setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
+      navigate("/authorizedContent");
     }).catch((error) => {
       setComponentToShow("welcome");
       console.error('Registration error:', error);
@@ -72,7 +66,6 @@ function App() {
   
   //Router creates links for each page and sends user to the specified links based on the button pressed on WelcomePageContent.
   return (    
-    <Router>
       <div>
         <div className='container-fluid'>
           <div className='row'>
@@ -87,7 +80,6 @@ function App() {
           </div>
         </div>
       </div>
-    </Router>
   );
 }
 
