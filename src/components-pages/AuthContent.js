@@ -33,6 +33,7 @@ const AuthContent = () => {
             <div className="col-4">
                 <div className="card" style={{ width: "30rem"}}>
                     <h5 className="card-title">Backend Response</h5>
+                    {data}
                     {data && data.map((line, index) => <p key={index}>{line}</p>)}
                 </div>
             </div>

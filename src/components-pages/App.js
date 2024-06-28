@@ -6,7 +6,7 @@ import logo from '../logo.svg';
 import WelcomePage from './WelcomePage';
 import AuthContent from './AuthContent';
 import LoginForm from './LoginForm';
-import { request } from "../axios_helper";
+import { request, setAuthToken } from "../axios_helper";
 import CreateLeague from './CreateLeague';
 
 function App() {
@@ -39,9 +39,13 @@ function App() {
       "/login",
       {login: username, password: password}
     ).then((response) => {
-      //setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
+      setAuthToken(response.data.token);
+      console.log('Login successful, response:', response);
+      setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
       navigate("/authorizedContent");
     }).catch((error) => {
+      setAuthToken(null);
+      console.error('Login error:', error);
       setComponentToShow("welcome");
     });
   };
@@ -55,10 +59,12 @@ function App() {
       "/register",
       {firstName: firstName, lastName: lastName, login: username, password: password}
     ).then((response) => {
+      setAuthToken(response.data.token);
       console.log('Registration successful, response:', response);
-      //setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
+      setComponentToShow("authorizedContent"); //when the user registers, they can view the authorized content
       navigate("/authorizedContent");
     }).catch((error) => {
+      setAuthToken(null);
       setComponentToShow("welcome");
       console.error('Registration error:', error);
     });

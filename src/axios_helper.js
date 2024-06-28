@@ -1,15 +1,36 @@
 import axios from "axios";
 
 axios.defaults.baseURL = 'http://localhost:8080'; //The backend url (springboot)
-axios.defaults.withCredentials = true; // This allows cookies to be included in cross-origin requests
 axios.defaults.headers.post["Content-Type"] = 'application/json'; //accepts/sends json data
 
 //Method to receive the authorization token.
+export const getAuthToken = () => {
+    return window.localStorage.getItem("auth_token");
+}
+
+export const setAuthToken = ( token ) => {
+    if (token !== null) {
+        window.localStorage.setItem("auth_token", token);
+    }
+    else {
+        window.localStorage.removeItem("auth_token")
+    }
+    
+}
 
 export const request = (method, url, data) => {
+    let headers = {};
+    const token = getAuthToken();
+    if (token) {
+        headers = {"Authorization": `Bearer ${token}`};
+    }
+
     return axios({
         method: method,
         url: url,
         data: data,
-    })
+        headers: headers
+    });
 }
+
+//export default request;
