@@ -1,7 +1,7 @@
 //This file is the protected content that needs authentication
 
 import React , { useState, useEffect } from "react";
-import { request , setAuthToken } from "../axios_helper";
+import { request } from "../axios_helper";
 
 const AuthContent = () => {
     const [data, setData] = useState([]);
@@ -33,6 +33,7 @@ const AuthContent = () => {
             <div className="col-4">
                 <div className="card" style={{ width: "30rem"}}>
                     <h5 className="card-title">Backend Response</h5>
+                    {data}
                     {data && data.map((line, index) => <p key={index}>{line}</p>)}
                 </div>
             </div>

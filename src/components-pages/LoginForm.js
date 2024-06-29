@@ -28,11 +28,13 @@ const LoginForm = ( props ) => {
 
     //Allows the parent component or something to handle the login logic.
     const onSubmitLogin = ( event ) => {
+        event.preventDefault();
         onLogin(event, login, password);
     }
 
     //allows the parent component or something to handle the register logic.
     const onSubmitRegister = ( event ) => {
+        event.preventDefault();
         onRegister(event, firstName, lastName, login, password);
     }
 
