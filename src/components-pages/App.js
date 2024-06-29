@@ -8,6 +8,7 @@ import AuthContent from './AuthContent';
 import LoginForm from './LoginForm';
 import { request, setAuthToken } from "../axios_helper";
 import CreateLeague from './CreateLeague';
+import JoinLeague from './JoinLeague';
 
 function App() {
   
@@ -20,9 +21,11 @@ function App() {
   };
 
   const logout = () => {
-    request("POST", "/logout")
-      .then(() => setComponentToShow("welcome"))
-      .catch(error => console.error('Logout error:', error));
+    request("POST", "/logout"
+    ).then(() => {
+      setComponentToShow("welcome");
+      setAuthToken(null);
+    }).catch(error => console.error('Logout error:', error));
   };
 
   const addLeague = () => {
@@ -80,6 +83,7 @@ function App() {
                 <Route path="/authorizedContent" element={<AuthContent/>} />
                 <Route path="/login" element={<LoginForm onLogin={onLogin} onRegister={onRegister}/>} />
                 <Route path="/createLeague" element={<CreateLeague/>} />
+                <Route path="/joinLeague" element={<JoinLeague/>} />
               </Routes>
             </div>
           </div>

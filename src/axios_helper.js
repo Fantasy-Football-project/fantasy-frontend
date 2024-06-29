@@ -1,4 +1,5 @@
 import axios from "axios";
+//import jwtDecode from 'jwt-decode';
 
 axios.defaults.baseURL = 'http://localhost:8080'; //The backend url (springboot)
 axios.defaults.headers.post["Content-Type"] = 'application/json'; //accepts/sends json data
@@ -7,6 +8,10 @@ axios.defaults.headers.post["Content-Type"] = 'application/json'; //accepts/send
 export const getAuthToken = () => {
     return window.localStorage.getItem("auth_token");
 }
+
+/*export const getUserId = ( token ) => {
+    return jwtDecode(token).iss;
+}*/
 
 export const setAuthToken = ( token ) => {
     if (token !== null) {
