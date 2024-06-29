@@ -55,7 +55,7 @@ const LoginForm = ( props ) => {
                         <form onSubmit={onSubmitLogin}>
                             <div className="form-outline mb-4">
                                 <input type="login" id="loginName" name="login" className="form-control" onChange={handleLoginChange}/>
-                                <label className="form-label" htmlFor="loginName">Email</label>
+                                <label className="form-label" htmlFor="loginName">Username</label>
                             </div>
 
                             <div className="form-outline mb-4">
