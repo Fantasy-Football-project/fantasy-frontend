@@ -81,7 +81,7 @@ const LoginForm = ( props ) => {
 
                             <div className="form-outline mb-4">
                                 <input type="text" id="login" name="login" className="form-control" onChange={handleLoginChange}/>
-                                <label className="form-label" htmlFor="login">Email</label>
+                                <label className="form-label" htmlFor="login">Username</label>
                             </div>
 
                             <div className="form-outline mb-4">

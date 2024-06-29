@@ -37,7 +37,7 @@ function App() {
     request(
       "POST",
       "/login",
-      {email: email, password: password}
+      {login: username, password: password}
     ).then((response) => {
       setAuthToken(response.data.token);
       console.log('Login successful, response:', response);
@@ -50,14 +50,14 @@ function App() {
     });
   };
 
-  const onRegister = (event, firstName, lastName, email, password) => {
+  const onRegister = (event, firstName, lastName, username, password) => {
     event.preventDefault();
 
     //using the axios helper method
     request(
       "POST",
       "/register",
-      {firstName: firstName, lastName: lastName, email: email, password: password}
+      {firstName: firstName, lastName: lastName, login: username, password: password}
     ).then((response) => {
       setAuthToken(response.data.token);
       console.log('Registration successful, response:', response);
