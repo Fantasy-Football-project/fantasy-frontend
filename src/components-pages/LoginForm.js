@@ -55,7 +55,7 @@ const LoginForm = ( props ) => {
                         <form onSubmit={onSubmitLogin}>
                             <div className="form-outline mb-4">
                                 <input type="login" id="loginName" name="login" className="form-control" onChange={handleLoginChange}/>
-                                <label className="form-label" htmlFor="loginName">Username</label>
+                                <label className="form-label" htmlFor="loginName">Email</label>
                             </div>
 
                             <div className="form-outline mb-4">
@@ -81,7 +81,7 @@ const LoginForm = ( props ) => {
 
                             <div className="form-outline mb-4">
                                 <input type="text" id="login" name="login" className="form-control" onChange={handleLoginChange}/>
-                                <label className="form-label" htmlFor="login">Username</label>
+                                <label className="form-label" htmlFor="login">Email</label>
                             </div>
 
                             <div className="form-outline mb-4">

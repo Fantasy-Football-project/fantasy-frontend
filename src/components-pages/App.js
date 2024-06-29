@@ -37,7 +37,7 @@ function App() {
     request(
       "POST",
       "/login",
-      {login: username, password: password}
+      {email: email, password: password}
     ).then((response) => {
       setAuthToken(response.data.token);
       console.log('Login successful, response:', response);
@@ -50,14 +50,14 @@ function App() {
     });
   };
 
-  const onRegister = (event, firstName, lastName, username, password) => {
+  const onRegister = (event, firstName, lastName, email, password) => {
     event.preventDefault();
 
     //using the axios helper method
     request(
       "POST",
       "/register",
-      {firstName: firstName, lastName: lastName, login: username, password: password}
+      {firstName: firstName, lastName: lastName, email: email, password: password}
     ).then((response) => {
       setAuthToken(response.data.token);
       console.log('Registration successful, response:', response);
@@ -65,8 +65,7 @@ function App() {
       navigate("/authorizedContent");
     }).catch((error) => {
       setAuthToken(null);
-      setComponentToShow("welcome");
-      console.error('Registration error:', error);
+      console.error(error.response.data)
     });
   };
   
