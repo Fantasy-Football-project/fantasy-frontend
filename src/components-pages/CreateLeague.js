@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { request } from '../axios_helper';
+import { useNavigate } from 'react-router-dom';
 
 const CreateLeague = () => {
     //Create variables to update for numbers of team and scoring system
@@ -8,8 +9,10 @@ const CreateLeague = () => {
     const [selectedScoring, setSelectedScoring] = useState('');
     const [componentToShow, setComponentToShow] = useState("");
 
+    const navigate = useNavigate();
+
     //Method to update variable when button is clicked
-    const handleUpdate = () => {
+    /*const handleUpdate = () => {
         //Get values from dropdown
         const teamsValue = document.getElementById('evenNumbers').value;
         const scoringValue = document.getElementById('scoringSystem').value;
@@ -18,7 +21,7 @@ const CreateLeague = () => {
         setSelectedTeams(teamsValue);
         setSelectedScoring(scoringValue);
         setLeagueName(nameValue);
-    };
+    };*/
 
     //This method gonna be to create a league. To do this, a user will be redirected to a different settings page,
     //where they can select basic settings. Based on those chosen settings, those will be some of the parameters that 
@@ -26,12 +29,41 @@ const CreateLeague = () => {
     const createLeague = (event) => {
         event.preventDefault();
 
+        //Get values from dropdown
+        const teamsValue = document.getElementById('evenNumbers').value;
+        const scoringValue = document.getElementById('scoringSystem').value;
+        const nameValue = document.getElementById('league-name').value;
+        //Update variables based on dropdown values
+        setSelectedTeams(teamsValue);
+        setSelectedScoring(scoringValue);
+        setLeagueName(nameValue);
+
+        let ppr = false;
+        let nonppr = false;
+        let halfppr = false;
+
+        if (scoringValue === "PPR") {
+            ppr = true;
+        }
+        
+        if (scoringValue === "Half-PPR") {
+            halfppr = true;
+        }
+
+        if (scoringValue === "Non-PPR") {
+            nonppr = true;
+        }
+
         request(
             "POST",
             "/create-league",
-            {}
+            {leagueName: leagueName, numTeams: teamsValue, ppr: ppr, nonPPR: nonppr, halfPPR: halfppr}
         ).then((response) => {
-            setComponentToShow("leagueContent")
+            //setComponentToShow("leagueContent")
+            navigate("/authorizedContent");
+        }).catch((error) => {
+            console.log(error);
+            navigate("/authorizedContent");
         })
     };
 
@@ -66,7 +98,7 @@ const CreateLeague = () => {
                         <option value="Half-PPR">Half-PPR</option>
                         <option value="Non-PPR">Non-PPR</option>
                     </select>
-                    <button onClick={handleUpdate} className="btn btn-primary mt-3">Create League</button>
+                    <button onClick={createLeague} className="btn btn-primary mt-3">Create League</button>
                 </div>
             </div>
         </div>

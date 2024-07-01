@@ -15,7 +15,6 @@ function WelcomePageContent() {
                 <div className='row justify-content-center'>
                     <div className='col-1'>
                         <Link to="/login" className="btn btn-primary" style={{margin: "5px"}}>Login</Link>
-                        <Link to="/createLeague" className="btn btn-success">Create League</Link>
                     </div>
                 </div>
             </div>
