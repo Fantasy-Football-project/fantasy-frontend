@@ -23,14 +23,17 @@ const AuthContent = () => {
 
     //This useEffect hook is used to display the leagues the user is in.
     useEffect(() => {
+        //This string is to pass in the requestparam needed for the '/leagues' GET method.
+        const querystring = `/leagues?username=${getUsername(getAuthToken())}`;
+
         // This is the helper method we made, with its parameters
         request(
             "GET", // Get request
-            "/leagues", // the url we assigned with the GETMapping annotation
-            {username: getUsername(getAuthToken())} // empty object
+            querystring, // the url we assigned with the GETMapping annotation
         ).then((response) => {
             if (Array.isArray(response.data)) {
                 setData(response.data); // updates the component's state with the fetched data if it's an array
+                console.log(response.data);
             } else {
                 console.error('Expected an array but got:', response.data);
                 setData([]); // fallback to empty array if the response is not an array

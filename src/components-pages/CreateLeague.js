@@ -1,27 +1,10 @@
 import React, { useState } from 'react';
-import { request } from '../axios_helper';
+import { getUsername, getAuthToken, request } from '../axios_helper';
 import { useNavigate } from 'react-router-dom';
 
 const CreateLeague = () => {
-    //Create variables to update for numbers of team and scoring system
-    const [leagueName, setLeagueName] = useState("");
-    const [selectedTeams, setSelectedTeams] = useState('');
-    const [selectedScoring, setSelectedScoring] = useState('');
-    const [componentToShow, setComponentToShow] = useState("");
 
     const navigate = useNavigate();
-
-    //Method to update variable when button is clicked
-    /*const handleUpdate = () => {
-        //Get values from dropdown
-        const teamsValue = document.getElementById('evenNumbers').value;
-        const scoringValue = document.getElementById('scoringSystem').value;
-        const nameValue = document.getElementById('league-name').value;
-        //Update variables based on dropdown values
-        setSelectedTeams(teamsValue);
-        setSelectedScoring(scoringValue);
-        setLeagueName(nameValue);
-    };*/
 
     //This method gonna be to create a league. To do this, a user will be redirected to a different settings page,
     //where they can select basic settings. Based on those chosen settings, those will be some of the parameters that 
@@ -33,10 +16,6 @@ const CreateLeague = () => {
         const teamsValue = document.getElementById('evenNumbers').value;
         const scoringValue = document.getElementById('scoringSystem').value;
         const nameValue = document.getElementById('league-name').value;
-        //Update variables based on dropdown values
-        setSelectedTeams(teamsValue);
-        setSelectedScoring(scoringValue);
-        setLeagueName(nameValue);
 
         let ppr = false;
         let nonppr = false;
@@ -54,12 +33,18 @@ const CreateLeague = () => {
             nonppr = true;
         }
 
+        //Get request to find the leagues that a user is in.
         request(
             "POST",
             "/create-league",
-            {leagueName: leagueName, numTeams: teamsValue, ppr: ppr, nonPPR: nonppr, halfPPR: halfppr}
+            {
+                leagueName: nameValue, 
+                numTeams: teamsValue, 
+                ppr: ppr, nonPPR: nonppr, 
+                halfPPR: halfppr, 
+                username: getUsername(getAuthToken())
+            }
         ).then((response) => {
-            //setComponentToShow("leagueContent")
             navigate("/authorizedContent");
         }).catch((error) => {
             console.log(error);
@@ -81,7 +66,7 @@ const CreateLeague = () => {
             <div className="row justify-content-md-center">
                 <div className="col-md-auto">
                     <h1>League Name</h1>
-                    <input id="league-name" class="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
+                    <input id="league-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
                     <h1>Number of Teams</h1>
                     <select id="evenNumbers" name="evenNumbers" className="form-control">
                         <option value="4">4</option>
