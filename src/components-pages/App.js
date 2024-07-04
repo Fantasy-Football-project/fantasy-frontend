@@ -6,15 +6,23 @@ import logo from '../logo.svg';
 import WelcomePage from './WelcomePage';
 import AuthContent from './AuthContent';
 import LoginForm from './LoginForm';
-import { request, setAuthToken } from "../axios_helper";
+import { getAuthToken, request, setAuthToken } from "../axios_helper";
 import CreateLeague from './CreateLeague';
 import JoinLeague from './JoinLeague';
+import LeagueInfo from './LeagueInfo';
 
 function App() {
   
   //this variable is to figure out which content to display (based on if the user is logged in or not)
   const[componentToShow, setComponentToShow] = useState("welcome");
+  const[authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (getAuthToken()) {
+      setAuthenticated(true);
+    }
+  })
 
   const login = () => {
     setComponentToShow("login"); //if user is logged in, the variable is set to "login", and back to "welcome" if the user logs out
@@ -80,10 +88,12 @@ function App() {
             <div className='col'>
               <Routes>
                 <Route path="/" element={<WelcomePage />} />
-                <Route path="/authorizedContent" element={<AuthContent/>} />
                 <Route path="/login" element={<LoginForm onLogin={onLogin} onRegister={onRegister}/>} />
-                <Route path="/createLeague" element={<CreateLeague/>} />
-                <Route path="/joinLeague" element={<JoinLeague/>} />
+                
+                {authenticated && <Route path="/authorizedContent" element={<AuthContent/>} />}
+                {authenticated && <Route path="/createLeague" element={<CreateLeague/>} />}
+                {authenticated && <Route path="/joinLeague" element={<JoinLeague/>} />}
+                {authenticated && <Route path="/leagueInfo" element={<LeagueInfo />} />}
               </Routes>
             </div>
           </div>

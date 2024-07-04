@@ -9,6 +9,12 @@ import { setAuthToken } from "../axios_helper";
 import CreateLeague from "./CreateLeague";
 import JoinLeague from "./JoinLeague";
 
+let leagueName = "";
+
+export const getLeagueName = () => {
+    return leagueName;
+}
+
 const AuthContent = () => {
     const [data, setData] = useState([]);
 
@@ -44,6 +50,10 @@ const AuthContent = () => {
         });
     }, []); // Empty dependency array ensures this runs once after the initial render
 
+    const settingLeagueName = ( name ) => {
+        leagueName = name;
+    }
+
     const renderLeagues = () => {
         if (data.length === 0) {
             return <p>No leagues found.</p>;
@@ -52,8 +62,14 @@ const AuthContent = () => {
         return (
             <ul>
                 {data.map((league) => (
-                    <li key={league.id}>
-                        {league.leagueName}
+                    <li key={league.id} className="card" style={{ width: "20rem", margin: "50px"}}>
+                        <h5 className="card-title">
+                            {league.leagueName}
+                        </h5>
+
+                        <div width="20px">
+                            <Link onClick={settingLeagueName(league.leagueName)} to="/leagueInfo" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
+                        </div>
                     </li>
                 ))}
             </ul>
@@ -72,12 +88,8 @@ const AuthContent = () => {
                 <Route path="/createLeague" element={<CreateLeague />} />
                 <Route path="/joinLeague" element={<JoinLeague />} />
             </Routes>
-            <div className="card" style={{ width: "30rem"}}>
 
-                <h5 className="card-title">Backend Response</h5>
-                {renderLeagues()}
-
-            </div>
+            {renderLeagues()}
 
             <Link to="/createLeague" className="btn btn-success">Create League</Link>
             <Link to="/joinLeague" className="btn btn-success">Join League</Link>
