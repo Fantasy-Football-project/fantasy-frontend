@@ -1,21 +1,34 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import '../styles/Navbar.css'
+//import '../styles/Navbar.css'
 import { getAuthToken, getUsername } from "../axios_helper";
 import { useState } from "react";
 
 function LeagueContentNavbar() {
     
     return(
-        <nav>
-            <ul>
-                <li>
-                    <Link to='/roster'>Roster</Link>
-                    <Link to='/matchup'>Matchup</Link>
-                    <Link to='/players'>Players</Link>
-                    <Link to='/league'>League</Link>
-                </li>
-            </ul>            
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid" >
+                <ul>
+                    <li>
+                        <Link to='/roster'>Roster</Link>
+                    </li>
+
+                    <li>
+                        <Link to='/matchup'>Matchup</Link>
+                    </li>
+                    
+                    <li>
+                        <Link to='/players'>Players</Link>
+                    </li>
+
+                    <li>
+                        <Link to='/league'>League</Link>
+                    </li>
+
+                </ul>  
+            </div>
+                      
         </nav>
     );
 }

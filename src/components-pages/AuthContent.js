@@ -54,6 +54,8 @@ const AuthContent = () => {
         leagueName = name;
     }
 
+    const count = 1;
+
     const renderLeagues = () => {
         if (data.length === 0) {
             return <p>No leagues found.</p>;
@@ -69,6 +71,18 @@ const AuthContent = () => {
 
                         <div width="20px">
                             <Link onClick={settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
+                        </div>
+
+                        <p>
+                            {league.joinCode}
+                        </p>
+                        
+                        <div>
+                            {league.users.map(user => (
+                                <p key={user.id}>
+                                    {user.login}
+                                </p>
+                            ))}
                         </div>
                     </li>
                 ))}

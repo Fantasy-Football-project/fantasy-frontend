@@ -25,6 +25,9 @@ function Navbar() {
             <ul>
                 <li>
                     <Link to='/authorizedContent'>Home</Link>
+                </li>
+
+                <li>
                     <Link to='/'>Logout</Link>
                 </li>
             </ul>

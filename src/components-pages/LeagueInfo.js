@@ -41,6 +41,7 @@ const Roster = () => {
     return(
         <div>
             <LeagueContentNavbar />
+            
             {renderTeamPlayers()}
         </div>
     );
