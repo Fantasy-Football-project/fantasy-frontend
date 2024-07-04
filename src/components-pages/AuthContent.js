@@ -68,7 +68,7 @@ const AuthContent = () => {
                         </h5>
 
                         <div width="20px">
-                            <Link onClick={settingLeagueName(league.leagueName)} to="/leagueInfo" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
+                            <Link onClick={settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
                         </div>
                     </li>
                 ))}
@@ -84,11 +84,6 @@ const AuthContent = () => {
     return (
         <div>
             <Navbar />
-            <Routes>
-                <Route path="/createLeague" element={<CreateLeague />} />
-                <Route path="/joinLeague" element={<JoinLeague />} />
-            </Routes>
-
             {renderLeagues()}
 
             <Link to="/createLeague" className="btn btn-success">Create League</Link>

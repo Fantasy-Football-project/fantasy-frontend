@@ -10,6 +10,7 @@ import { getAuthToken, request, setAuthToken } from "../axios_helper";
 import CreateLeague from './CreateLeague';
 import JoinLeague from './JoinLeague';
 import LeagueInfo from './LeagueInfo';
+import Roster from './LeagueInfo';
 
 function App() {
   
@@ -93,7 +94,7 @@ function App() {
                 {authenticated && <Route path="/authorizedContent" element={<AuthContent/>} />}
                 {authenticated && <Route path="/createLeague" element={<CreateLeague/>} />}
                 {authenticated && <Route path="/joinLeague" element={<JoinLeague/>} />}
-                {authenticated && <Route path="/leagueInfo" element={<LeagueInfo />} />}
+                {authenticated && <Route path="/roster" element={<Roster />} />}
               </Routes>
             </div>
           </div>

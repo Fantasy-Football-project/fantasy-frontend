@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
+import LeagueContentNavbar from "./LeagueContentNavbar";
 
-const LeagueInfo = () => {
+const Roster = () => {
     const [playerData, setPlayerData] = useState([]);
 
     useEffect(() => {
@@ -39,9 +40,10 @@ const LeagueInfo = () => {
 
     return(
         <div>
+            <LeagueContentNavbar />
             {renderTeamPlayers()}
         </div>
     );
 }
 
-export default LeagueInfo;
+export default Roster;
