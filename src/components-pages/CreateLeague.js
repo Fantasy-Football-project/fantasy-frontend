@@ -16,6 +16,8 @@ const CreateLeague = () => {
         const teamsValue = document.getElementById('evenNumbers').value;
         const scoringValue = document.getElementById('scoringSystem').value;
         const nameValue = document.getElementById('league-name').value;
+        const teamValue = document.getElementById('team-name').value;
+        const fullNameValue = document.getElementById('full-name').value;
 
         let ppr = false;
         let nonppr = false;
@@ -42,7 +44,9 @@ const CreateLeague = () => {
                 numTeams: teamsValue, 
                 ppr: ppr, nonPPR: nonppr, 
                 halfPPR: halfppr, 
-                username: getUsername(getAuthToken())
+                username: getUsername(getAuthToken()),
+                teamName: teamValue,
+                fullName: fullNameValue
             }
         ).then((response) => {
             navigate("/authorizedContent");
@@ -83,6 +87,12 @@ const CreateLeague = () => {
                         <option value="Half-PPR">Half-PPR</option>
                         <option value="Non-PPR">Non-PPR</option>
                     </select>
+                    <h1>Team Name</h1>
+                    <input id="team-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
+
+                    <h1>Full Name</h1>
+                    <input id="full-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
+
                     <button onClick={createLeague} className="btn btn-primary mt-3">Create League</button>
                 </div>
             </div>
