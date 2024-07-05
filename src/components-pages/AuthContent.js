@@ -30,6 +30,7 @@ const AuthContent = () => {
     //This useEffect hook is used to display the leagues the user is in.
     useEffect(() => {
         //This string is to pass in the requestparam needed for the '/leagues' GET method.
+        leagueName = "";
         const querystring = `/leagues?username=${getUsername(getAuthToken())}`;
 
         // This is the helper method we made, with its parameters
