@@ -33,17 +33,21 @@ const JoinLeague = () => {
     };
 
     return(
-        <div>
-            <h1>Join Code</h1>
-            <input id="join-code" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
+        <div className="container">
+            <div className="row justify-content-md-center">
+                <div className="col-md-auto">
+                    <h1>Join Code</h1>
+                    <input id="join-code" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
 
-            <h1>Team Name</h1>
-            <input id="team-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
+                    <h1>Team Name</h1>
+                    <input id="team-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
 
-            <h1>Full Name</h1>
-            <input id="full-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
+                    <h1>Full Name</h1>
+                    <input id="full-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
 
-            <button onClick={joinLeague} className="btn btn-primary mt-3">Join League</button>
+                    <button onClick={joinLeague} className="btn btn-primary mt-3">Join League</button>
+                </div>
+            </div>
         </div>
     )
 }
