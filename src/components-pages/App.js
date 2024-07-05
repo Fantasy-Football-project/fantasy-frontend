@@ -1,16 +1,17 @@
 //Overall file.
 import React , { useState , useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate} from 'react-router-dom';
 import './App.css';
-import logo from '../logo.svg';
 import WelcomePage from './WelcomePage';
 import AuthContent from './AuthContent';
 import LoginForm from './LoginForm';
 import { getAuthToken, request, setAuthToken } from "../axios_helper";
 import CreateLeague from './CreateLeague';
 import JoinLeague from './JoinLeague';
-import LeagueInfo from './LeagueInfo';
-import Roster from './LeagueInfo';
+import Roster from './Roster';
+import Matchup from './Matchup';
+import Players from './Players';
+import League from './League';
 
 function App() {
   
@@ -36,10 +37,6 @@ function App() {
       setAuthToken(null);
     }).catch(error => console.error('Logout error:', error));
   };
-
-  const addLeague = () => {
-    setComponentToShow("createLeague");
-  }
 
   //Calling the login function in the backend.
   const onLogin = (event, username, password) => {
@@ -95,6 +92,9 @@ function App() {
                 {authenticated && <Route path="/createLeague" element={<CreateLeague/>} />}
                 {authenticated && <Route path="/joinLeague" element={<JoinLeague/>} />}
                 {authenticated && <Route path="/roster" element={<Roster />} />}
+                {authenticated && <Route path="/matchup" element={<Matchup />} />}
+                {authenticated && <Route path="/players" element={<Players />} />}
+                {authenticated && <Route path="/league" element={<League />} />}
               </Routes>
             </div>
           </div>
