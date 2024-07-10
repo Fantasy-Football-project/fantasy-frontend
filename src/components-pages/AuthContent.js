@@ -3,17 +3,19 @@
 
 import React , { useState, useEffect } from "react";
 import { getAuthToken, getUsername, request } from "../axios_helper";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "./AuthNavbar";
 import { setAuthToken } from "../axios_helper";
-import CreateLeague from "./CreateLeague";
-import JoinLeague from "./JoinLeague";
 
 let leagueName = "";
 
+export const settingLeagueName = (leagueName) => {
+    localStorage.setItem('leagueName', leagueName);
+};
+
 export const getLeagueName = () => {
-    return leagueName;
-}
+    return localStorage.getItem('leagueName');
+};
 
 const AuthContent = () => {
     const [data, setData] = useState([]);
@@ -50,12 +52,6 @@ const AuthContent = () => {
             setData([]); // fallback to empty array in case of error
         });
     }, []); // Empty dependency array ensures this runs once after the initial render
-
-    const settingLeagueName = ( name ) => {
-        leagueName = name;
-    }
-
-    const count = 1;
 
     const renderLeagues = () => {
         if (data.length === 0) {
