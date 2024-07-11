@@ -17,10 +17,23 @@ export const PastPlayerModal = ( {playerModal} ) => {
         }).catch((error) => {
             console.log(error);
         })
-    })
+    }, [playerModal])
 
     const renderQB = () => {
-
+        /*
+        Season: {player.passing_stats_season}
+                            Team: {player.passing_stats_team}
+                            Games Played: {player.passing_stats_games}
+                            QB Rating: {player.passing_stats_QB_rating}
+                            {player.passing_stats_completions}
+                            {player.passing_stats_attempts}
+                            {player.passing_stats_completion_percentage}
+                            {player.passing_stats_yards}
+                            {player.passing_stats_yards_per_attempt}
+                            {player.passing_stats_touchdowns}
+                            {player.passing_stats_interceptions}
+                            {player.passing_stats_sacks}
+        */
     }
 
     const renderRB = () => {
@@ -47,27 +60,14 @@ export const PastPlayerModal = ( {playerModal} ) => {
 
     return(
         <div>
-            {playerHistory.map((player) => (
-                <li>
+            {playerHistory.map((player, index) => (
+                <li key={index}>
                     if ({player.position} === "QB") {
                         <p>
-                            Name: {player.fullName}
+                            Name: {player.playerName}
                             {player.age}
                             {player.weight}
-                            {player.height}
-                            Season: {player.passing_stats_season}
-                            Team: {player.passing_stats_team}
-                            Games Played: {player.passing_stats_games}
-                            QB Rating: {player.passing_stats_QB_rating}
-                            {player.passing_stats_completions}
-                            {player.passing_stats_attempts}
-                            {player.passing_stats_completion_percentage}
-                            {player.passing_stats_yards}
-                            {player.passing_stats_yards_per_attempt}
-                            {player.passing_stats_touchdowns}
-                            {player.passing_stats_interceptions}
-                            {player.passing_stats_sacks}
-                            
+                            {player.height}            
                         </p>
                     }
                 </li>

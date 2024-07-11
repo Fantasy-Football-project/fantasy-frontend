@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { request } from "../axios_helper";
 import { getLeagueName } from "./AuthContent";
@@ -10,13 +10,17 @@ const Players = () => {
     const [pageNumber, setPageNumber] = useState(0);
     const [totalPages, setTotalPages] = useState();
     const [selectedPlayer, setSelectedPlayer] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const openModal = (player) => {
         setSelectedPlayer(player);
+        setModalOpen(true);
+        console.log(selectedPlayer)
     };
     
     const closeModal = () => {
         setSelectedPlayer(null);
+        setModalOpen(false);
     };
 
     const getAvailablePlayers = () => {
@@ -55,10 +59,9 @@ const Players = () => {
                     {availablePlayers.map((player) => (
                         <tr key={player.id}>
                             <th>
-                                <button onClick={() => openModal(player)} type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    View Player History
+                                <button onClick={() => openModal(player)} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target= '#staticBackdrop'>
+                                    Launch static backdrop modal
                                 </button>
-                                
                             </th>
                             <th scope="row">{player.fullName}</th>
                             <td>{player.position}</td>
@@ -67,35 +70,25 @@ const Players = () => {
                 </tbody>
                 </table>
 
-                {selectedPlayer && (
-                    <div className="modal fade show" tabIndex="-1" role="dialog">
-                        <div className="modal-dialog" role="document">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Player History</h5>
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        onClick={() => closeModal}
-                                        aria-label="Close"
-                                    ></button>
-                                </div>
-                                <div className="modal-body">
-                                    <PastPlayerModal playerModal={selectedPlayer} />
-                                </div>
-                                <div className="modal-footer">
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                        onClick={closeModal}
-                                    >
-                                        Close
-                                    </button>
-                                </div>
-                            </div>
+                <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <PastPlayerModal playerModal={selectedPlayer} />
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" className="btn btn-primary">Understood</button>
+                        </div>
                         </div>
                     </div>
-                )}
+                </div>
+
+                
 
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
@@ -104,26 +97,18 @@ const Players = () => {
                                 Previous
                             </button>
                         </li>
-                        
-                        
-                        
+
                         <li class="page-item">
-                            <button class="page-link">{pageNumber - 1}</button>
+                            {pageNumber > 0 && <button class="page-link">{pageNumber - 1}</button>}
                         </li>
-                        
-                        
                         
                         <li class="page-item active">
                             <button class="page-link">{pageNumber}</button>
                         </li>
                         
-                        
-                        
                         <li class="page-item">
                             <button class="page-link">{pageNumber + 1}</button>
                         </li>
-                        
-                        
                         
                         <li class="page-item">
                             <button onClick={() => setPageNumber(pageNumber + 1)} disabled={pageNumber === totalPages - 1} class="page-link">
@@ -146,3 +131,41 @@ const Players = () => {
 }
 
 export default Players;
+
+/*
+
+<button id={`button-${player.id}`} type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#modal-${player.id}`}>
+    View Player History
+</button>
+
+
+{modalOpen && (
+                    <div className="modal-dialog modal-xl" tabIndex="-1" role="dialog" id={`modal-${selectedPlayer.id}`}>
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Player History</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div className="modal-body">
+                                    <PastPlayerModal playerModal={selectedPlayer} />
+                                    {console.log(selectedPlayer)}
+                                </div>
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+*/
