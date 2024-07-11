@@ -2,24 +2,32 @@ import React, { useEffect, useState } from "react";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { request } from "../axios_helper";
 import { getLeagueName } from "./AuthContent";
+import { PastPlayerModal } from "./PastPlayerModal";
 
 const Players = () => {
 
     const [availablePlayers, setAvailablePlayers] = useState([]);
-    /*const [playerName, setPlayerName] = useState("");
+    const [pageNumber, setPageNumber] = useState(0);
+    const [totalPages, setTotalPages] = useState();
+    const [selectedPlayer, setSelectedPlayer] = useState(null);
 
-    const trimPlayerName = ( playername ) => {
-        return playername.substring(0, playername.indexOf(" ("));
-    }*/
+    const openModal = (player) => {
+        setSelectedPlayer(player);
+    };
+    
+    const closeModal = () => {
+        setSelectedPlayer(null);
+    };
 
     const getAvailablePlayers = () => {
-        const queryString = `/get-all-players?leagueName=${getLeagueName()}`;
+        const queryString = `/get-all-players?leagueName=${getLeagueName()}&pageNumber=${pageNumber}&pageSize=50`;
         
         request(
             "GET",
             queryString,
         ).then((response) => {
-            setAvailablePlayers(response.data);
+            setAvailablePlayers(response.data.content);
+            setTotalPages(response.data.totalPages)
         }).catch((error) => {
             console.log(getLeagueName())
             console.log(error);
@@ -28,18 +36,10 @@ const Players = () => {
 
     useEffect(() => {
         getAvailablePlayers();
-    }, [])
+        console.log("render counter");
+    }, [pageNumber]) //runs when page number changes
 
-    window.addEventListener("beforeunload", (event) => {
-        getAvailablePlayers();
-        console.log("API call before page reload");
-    });
- 
-    window.addEventListener("unload", (event) => {
-        getAvailablePlayers();
-        console.log("API call after page reload");
-    });
-
+    //To render the players in the league, and add a modal to each player to view their past stats.
     const renderAvailablePlayers = () => {
         return (
             <ul>
@@ -55,28 +55,10 @@ const Players = () => {
                     {availablePlayers.map((player) => (
                         <tr key={player.id}>
                             <th>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button onClick={() => openModal(player)} type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     View Player History
                                 </button>
-
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                PLACEHOLDER
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </th>
                             <th scope="row">{player.fullName}</th>
                             <td>{player.position}</td>
@@ -84,6 +66,72 @@ const Players = () => {
                     ))}
                 </tbody>
                 </table>
+
+                {selectedPlayer && (
+                    <div className="modal fade show" tabIndex="-1" role="dialog">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">Player History</h5>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        onClick={() => closeModal}
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div className="modal-body">
+                                    <PastPlayerModal playerModal={selectedPlayer} />
+                                </div>
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        onClick={closeModal}
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="{`page-item ${pageNumber === 0 ? 'disabled' : ''}`}">
+                            <button onClick={() => setPageNumber(pageNumber - 1)} disabled={pageNumber === 0} class="page-link">
+                                Previous
+                            </button>
+                        </li>
+                        
+                        
+                        
+                        <li class="page-item">
+                            <button class="page-link">{pageNumber - 1}</button>
+                        </li>
+                        
+                        
+                        
+                        <li class="page-item active">
+                            <button class="page-link">{pageNumber}</button>
+                        </li>
+                        
+                        
+                        
+                        <li class="page-item">
+                            <button class="page-link">{pageNumber + 1}</button>
+                        </li>
+                        
+                        
+                        
+                        <li class="page-item">
+                            <button onClick={() => setPageNumber(pageNumber + 1)} disabled={pageNumber === totalPages - 1} class="page-link">
+                                Next
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </ul>
         );
     }
