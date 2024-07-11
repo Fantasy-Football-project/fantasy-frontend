@@ -3,6 +3,7 @@ import { request } from "../axios_helper";
 
 export const PastPlayerModal = ( {playerModal} ) => {
     const [playerHistory, setPlayerHistory] = useState([]);
+    const [selectedPlayer, setSelectedPlayer] = useState(playerModal);
 
     useEffect(() => {
         const playerName = playerModal.fullName.substring(0, playerModal.fullName.indexOf(" ("));
@@ -14,26 +15,35 @@ export const PastPlayerModal = ( {playerModal} ) => {
             queryString
         ).then((response) => {
             setPlayerHistory(response.data);
+            setSelectedPlayer(response.data[1])
+            console.log(selectedPlayer)
         }).catch((error) => {
             console.log(error);
         })
     }, [playerModal])
 
     const renderQB = () => {
-        /*
-        Season: {player.passing_stats_season}
-                            Team: {player.passing_stats_team}
-                            Games Played: {player.passing_stats_games}
-                            QB Rating: {player.passing_stats_QB_rating}
-                            {player.passing_stats_completions}
-                            {player.passing_stats_attempts}
-                            {player.passing_stats_completion_percentage}
-                            {player.passing_stats_yards}
-                            {player.passing_stats_yards_per_attempt}
-                            {player.passing_stats_touchdowns}
-                            {player.passing_stats_interceptions}
-                            {player.passing_stats_sacks}
-        */
+        return(
+            <ul>
+                <div>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1>
+                </div>
+
+                <p>hi</p>
+                
+                
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </ul>
+        );
     }
 
     const renderRB = () => {
@@ -57,19 +67,15 @@ export const PastPlayerModal = ( {playerModal} ) => {
     }
 
     
-
+    //lowkey card out the top stuff, and then table out the other stuff yerrrrrr
     return(
         <div>
+            <h3>{selectedPlayer.playerName} Position: {selectedPlayer.position}</h3>
+            <h3>{selectedPlayer.age}</h3>
+            <h3>{selectedPlayer.weight}</h3>
             {playerHistory.map((player, index) => (
                 <li key={index}>
-                    if ({player.position} === "QB") {
-                        <p>
-                            Name: {player.playerName}
-                            {player.age}
-                            {player.weight}
-                            {player.height}            
-                        </p>
-                    }
+                    {player.position==="QB" && renderQB()}
                 </li>
             ))}
         </div>

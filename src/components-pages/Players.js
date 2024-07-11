@@ -13,9 +13,11 @@ const Players = () => {
     const [modalOpen, setModalOpen] = useState(false);
 
     const openModal = (player) => {
-        setSelectedPlayer(player);
-        setModalOpen(true);
-        console.log(selectedPlayer)
+        if (player !== null) {
+            setSelectedPlayer(player);
+            setModalOpen(true);
+            console.log(selectedPlayer)
+        }
     };
     
     const closeModal = () => {
@@ -55,38 +57,40 @@ const Players = () => {
                             <th scope="col">Position</th>
                         </tr>
                     </thead>
-                <tbody>
-                    {availablePlayers.map((player) => (
-                        <tr key={player.id}>
-                            <th>
-                                <button onClick={() => openModal(player)} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target= '#staticBackdrop'>
-                                    Launch static backdrop modal
-                                </button>
-                            </th>
-                            <th scope="row">{player.fullName}</th>
-                            <td>{player.position}</td>
-                        </tr>
-                    ))}
-                </tbody>
+                    <tbody>
+                        {availablePlayers.map((player) => (
+                            <tr key={player.id}>
+                                <th>
+                                    <button onClick={() => openModal(player)} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target= '#staticBackdrop'>
+                                        Launch static backdrop modal
+                                    </button>
+                                </th>
+                                <th scope="row">{player.fullName}</th>
+                                <td>{player.position}</td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
 
-                <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div className="modal-dialog">
+                {modalOpen &&
+                <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-fullscreen">
                         <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <PastPlayerModal playerModal={selectedPlayer} />
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Understood</button>
-                        </div>
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5" id="staticBackdropLabel">{selectedPlayer.fullName}</h1>
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <PastPlayerModal playerModal={selectedPlayer} />
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" className="btn btn-primary">Understood</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                }
 
                 
 
@@ -131,41 +135,3 @@ const Players = () => {
 }
 
 export default Players;
-
-/*
-
-<button id={`button-${player.id}`} type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target={`#modal-${player.id}`}>
-    View Player History
-</button>
-
-
-{modalOpen && (
-                    <div className="modal-dialog modal-xl" tabIndex="-1" role="dialog" id={`modal-${selectedPlayer.id}`}>
-                        <div className="modal-dialog" role="document">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title" id="exampleModalLabel">Player History</h5>
-                                    <button
-                                        type="button"
-                                        className="btn-close"
-                                        aria-label="Close"
-                                    ></button>
-                                </div>
-                                <div className="modal-body">
-                                    <PastPlayerModal playerModal={selectedPlayer} />
-                                    {console.log(selectedPlayer)}
-                                </div>
-                                <div className="modal-footer">
-                                    <button
-                                        type="button"
-                                        className="btn btn-secondary"
-                                    >
-                                        Close
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-*/
