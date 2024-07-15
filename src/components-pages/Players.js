@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { request } from "../axios_helper";
 import { getLeagueName } from "./AuthContent";
@@ -14,7 +14,7 @@ const Players = () => {
 
     const openModal = ( player ) => {
         if (player !== null) {
-            setSelectedPlayer(player);
+            setSelectedPlayer(() => player);
             setModalOpen(true);
             console.log(selectedPlayer);
         }
@@ -64,7 +64,7 @@ const Players = () => {
                         {availablePlayers.map((player) => (
                             <tr key={player.id}>
                                 <th>
-                                    <button onClick={() => openModal(player)} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target= '#staticBackdrop'>
+                                    <button onClick={() => openModal(player)} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target= {`#staticBackdrop${player.id}`}>
                                         View Player History
                                     </button>
                                 </th>
@@ -76,7 +76,7 @@ const Players = () => {
                 </table>
 
                 {modalOpen &&
-                <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className="modal fade" id={`staticBackdrop${selectedPlayer.id}`} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div className="modal-dialog modal-fullscreen">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -88,7 +88,6 @@ const Players = () => {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn btn-primary">Understood</button>
                             </div>
                         </div>
                     </div>
