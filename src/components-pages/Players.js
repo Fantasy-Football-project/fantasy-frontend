@@ -9,20 +9,23 @@ const Players = () => {
     const [availablePlayers, setAvailablePlayers] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalPages, setTotalPages] = useState();
-    const [selectedPlayer, setSelectedPlayer] = useState(null);
+    const [selectedPlayer, setSelectedPlayer] = useState();
     const [modalOpen, setModalOpen] = useState(false);
 
-    const openModal = (player) => {
+    const openModal = ( player ) => {
         if (player !== null) {
             setSelectedPlayer(player);
             setModalOpen(true);
-            console.log(selectedPlayer)
+            console.log(selectedPlayer);
         }
     };
     
+    //Might not be necessary.
     const closeModal = () => {
         setSelectedPlayer(null);
         setModalOpen(false);
+        console.log(selectedPlayer);
+        console.log(modalOpen);
     };
 
     const getAvailablePlayers = () => {
@@ -62,7 +65,7 @@ const Players = () => {
                             <tr key={player.id}>
                                 <th>
                                     <button onClick={() => openModal(player)} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target= '#staticBackdrop'>
-                                        Launch static backdrop modal
+                                        View Player History
                                     </button>
                                 </th>
                                 <th scope="row">{player.fullName}</th>
@@ -77,11 +80,11 @@ const Players = () => {
                     <div className="modal-dialog modal-fullscreen">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="staticBackdropLabel">{selectedPlayer.fullName}</h1>
+                                <h1 className="modal-title fs-5" id="staticBackdropLabel">{selectedPlayer?.fullName}</h1>
                                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <PastPlayerModal playerModal={selectedPlayer} />
+                                {selectedPlayer && <PastPlayerModal playerModal={selectedPlayer} />}
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -93,7 +96,6 @@ const Players = () => {
                 }
 
                 
-
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="{`page-item ${pageNumber === 0 ? 'disabled' : ''}`}">
