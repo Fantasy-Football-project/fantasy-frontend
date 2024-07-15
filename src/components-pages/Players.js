@@ -75,24 +75,48 @@ const Players = () => {
                     </tbody>
                 </table>
 
-                {modalOpen &&
-                <div className="modal fade" id={`staticBackdrop${selectedPlayer.id}`} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-fullscreen">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="staticBackdropLabel">{selectedPlayer?.fullName}</h1>
-                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                {selectedPlayer && <PastPlayerModal playerModal={selectedPlayer} />}
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                {availablePlayers.map((player) => (
+                    <div
+                        key={`modal-${player.id}`}
+                        className="modal fade"
+                        id={`staticBackdrop${player.id}`}
+                        data-bs-backdrop="static"
+                        data-bs-keyboard="false"
+                        tabIndex="-1"
+                        aria-labelledby={`staticBackdropLabel${player.id}`}
+                        aria-hidden="true"
+                    >
+                        <div className="modal-dialog modal-fullscreen">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h1 className="modal-title fs-5" id={`staticBackdropLabel${player.id}`}>
+                                        {player.fullName}
+                                    </h1>
+                                    <button
+                                        type="button"
+                                        className="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div className="modal-body">
+                                    {selectedPlayer && selectedPlayer.id === player.id && (
+                                        <PastPlayerModal playerModal={selectedPlayer} />
+                                    )}
+                                </div>
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                }
+                ))}
 
                 
                 <nav aria-label="Page navigation example">
