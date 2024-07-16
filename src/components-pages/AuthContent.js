@@ -67,7 +67,7 @@ const AuthContent = () => {
                         </h5>
 
                         <div width="20px">
-                            <Link onClick={settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
+                            <Link id={`league${league.id}`} onClick={() => settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
                         </div>
 
                         <p>

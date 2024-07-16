@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import { getLeagueName } from "./AuthContent";
 import LeagueContentNavbar from "./LeagueContentNavbar";
+import { useNavigate } from "react-router-dom";
 
 const League = () => {
     const[leagueData, setLeagueData] = useState();
     const[numberOfUsers, setNumberOfUsers] = useState();
+    const navigate = useNavigate();
     
     //This useEffect hook is used to display the leagues the user is in.
     useEffect(() => {
@@ -39,11 +41,29 @@ const League = () => {
         );
     }
 
+    //NEED TO ADD AN "ARE YOU SURE" MODAL
+    const deleteLeague = () => {
+       const queryString = `/delete-league?leagueName=${getLeagueName()}`
+
+       request(
+            "DELETE",
+            queryString
+       ).then((response) => {
+            console.log("League successfully deleted.");
+            navigate("/authorizedContent");
+
+       }).catch((error) => {
+            console.log(error);
+       })
+    }
+
 
     return(
         <div>
             <LeagueContentNavbar />
             {renderUsers()}
+
+            <button onClick={deleteLeague} type="button" class="btn btn-danger">Delete League</button>
             
         </div>
     )
