@@ -61,6 +61,7 @@ const League = () => {
     return(
         <div>
             <LeagueContentNavbar />
+
             {renderUsers()}
 
             <button onClick={deleteLeague} type="button" class="btn btn-danger">Delete League</button>
