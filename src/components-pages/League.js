@@ -7,7 +7,21 @@ import { useNavigate } from "react-router-dom";
 const League = () => {
     const[leagueData, setLeagueData] = useState();
     const[numberOfUsers, setNumberOfUsers] = useState();
+    const[commissioner, setCommissioner] = useState();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
+
+        request(
+            "GET",
+            queryString
+        ).then((response) => {
+            setCommissioner(response.data.commissioner);
+        }).catch((error) => {
+            console.log(error);
+        })
+    })
     
     //This useEffect hook is used to display the leagues the user is in.
     useEffect(() => {
@@ -64,8 +78,7 @@ const League = () => {
 
             {renderUsers()}
 
-            <button onClick={deleteLeague} type="button" class="btn btn-danger">Delete League</button>
-            
+            {commissioner && <button onClick={deleteLeague} type="button" class="btn btn-danger">Delete League</button>}
         </div>
     )
 }

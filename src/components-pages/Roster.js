@@ -7,7 +7,7 @@ const Roster = () => {
     const [playerData, setPlayerData] = useState([]);
 
     useEffect(() => {
-        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
+        const queryString = `/get-roster?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
 
         request(
             "GET",

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { getLeagueName } from "./AuthContent";
 import { request } from "../axios_helper";
-import { clear } from "@testing-library/user-event/dist/clear";
 
 const DraftSettings = () => {
     const [draftOrder, setDraftOrder] = useState(null);
@@ -42,7 +41,7 @@ const DraftSettings = () => {
                 <ul>
                     {Object.keys(draftOrder).map(key => (
                         <li key={key}>
-                            Pick #{key} belongs to {draftOrder[key].id}
+                            Pick #{key} belongs to {draftOrder[key].teamName}
                         </li>
                     ))}
                 </ul>
