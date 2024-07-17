@@ -5,6 +5,7 @@ import { request } from "../axios_helper";
 
 const DraftSettings = () => {
     const [draftOrder, setDraftOrder] = useState(null);
+    const [numTeams, setNumTeams] = useState();
 
     const randomizeDraftOrder = () => {
         const queryString = `/randomize-draft-order?leagueName=${getLeagueName()}`
@@ -29,6 +30,7 @@ const DraftSettings = () => {
             querystring,
         ).then((response) => {
             setDraftOrder(response.data.draftOrder);
+            setNumTeams(response.data.numTeams);
             console.log(response.data);
         }).catch((error) => {
             console.error('Error fetching data:', error);
@@ -40,9 +42,10 @@ const DraftSettings = () => {
             draftOrder && (
                 <ul>
                     {Object.keys(draftOrder).map(key => (
+                        (key <= numTeams &&
                         <li key={key}>
                             Pick #{key} belongs to {draftOrder[key].teamName}
-                        </li>
+                        </li>)
                     ))}
                 </ul>
             )
