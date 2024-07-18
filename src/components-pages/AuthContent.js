@@ -19,6 +19,7 @@ export const getLeagueName = () => {
 
 const AuthContent = () => {
     const [data, setData] = useState([]);
+    const [draftStart, setDraftStart] = useState(false);
 
     const logout = () => {
         request(
@@ -65,6 +66,10 @@ const AuthContent = () => {
                         <h5 className="card-title">
                             {league.leagueName}
                         </h5>
+                        
+                        {league.draftStart === false && league.draftDate && 
+                            (<div>Draft Date: {new Date(league.draftDate).toLocaleString()}</div>)}
+                        
 
                         <div width="20px">
                             <Link id={`league${league.id}`} onClick={() => settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
