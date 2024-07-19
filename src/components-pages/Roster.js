@@ -4,7 +4,7 @@ import { getAuthToken, getUsername, request } from "../axios_helper";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 
 const Roster = () => {
-    const [playerData, setPlayerData] = useState([]);
+    const [roster, setRoster] = useState([]);
     const [draftDone, setDraftDone] = useState();
     const [draftPicks, setDraftPicks] = useState([]);
 
@@ -43,7 +43,7 @@ const Roster = () => {
             "GET",
             queryString
         ).then((response) => {
-            setPlayerData(response.data);
+            setRoster(response.data);
         }).catch((error) => {
             console.log(error);
         })
@@ -52,11 +52,10 @@ const Roster = () => {
     const renderTeamPlayers = () => {
         return (
             <ul>
-                {playerData.map((player) => (
+                {roster.map((player) => (
                     <li key={player.id} className="card" style={{ width: "20rem", margin: "50px"}}>
                         <h5 className="card-title">
-                            {player.firstName}
-                            {player.lastName}
+                            {player.fullName}
                         </h5>
 
                         <div width="20px">

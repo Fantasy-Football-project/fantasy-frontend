@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from "react";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { getLeagueName } from "./AuthContent";
-import { request } from "../axios_helper";
+import { getAuthToken, getUsername, request } from "../axios_helper";
+import { Link } from "react-router-dom";
 
 const DraftSettings = () => {
-    const [draftOrder, setDraftOrder] = useState(null);
+    const [draftOrder, setDraftOrder] = useState([]);
     const [numTeams, setNumTeams] = useState();
     const [draftDate, setDraftDate] = useState(null);
+
+    const[commissioner, setCommissioner] = useState();
+
+    useEffect(() => {
+        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
+
+        request(
+            "GET",
+            queryString
+        ).then((response) => {
+            setCommissioner(response.data.commissioner);
+        }).catch((error) => {
+            console.log(error);
+        })
+    })
 
     const randomizeDraftOrder = () => {
         const queryString = `/randomize-draft-order?leagueName=${getLeagueName()}`
@@ -66,13 +82,17 @@ const DraftSettings = () => {
         
         const selectedDateString = `${selectedMonth} ${selectedDay}, ${currentDate.getFullYear()} ${selectedTime}`;
 
-        const selectedDate = new Date(selectedDateString).toISOString();
+        const selectedDate = new Date(selectedDateString);
         
         if (currentDate > selectedDate) {
-            appendAlert("Invalid Date. Choose a future date.", "danger");
+            appendAlert("Invalid date. Choose a future date.", "danger");
+        }
+        else if (!draftOrder.length) {
+            appendAlert("Set draft order before setting draft date.", "danger");
         }
         else {
-            const queryString = `/set-draft-date?leagueName=${getLeagueName()}&draftDate=${selectedDate}`
+            console.log(draftOrder);
+            const queryString = `/set-draft-date?leagueName=${getLeagueName()}&draftDate=${selectedDate.toISOString()}`
             request(
                 "PUT",
                 queryString
@@ -82,9 +102,6 @@ const DraftSettings = () => {
                 console.log(error);
             })
         }
-
-        console.log(currentDate);
-        console.log(selectedDate);
     }
 
     const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
@@ -109,11 +126,15 @@ const DraftSettings = () => {
 
             {renderDraftOrder()}
 
-            <button onClick={randomizeDraftOrder} type="button" className="btn btn-info">Randomize Draft Order</button>
+            {commissioner && 
+                <button onClick={randomizeDraftOrder} type="button" className="btn btn-info">Randomize Draft Order</button>}
 
+            <Link to='/draft-ui' type="button" class="btn btn-info">Enter Draft</Link>
+
+            {commissioner &&
             <button style={{ margin: "10px" }} type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Edit Draft Time
-            </button>
+            </button>}
 
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -167,6 +188,7 @@ const DraftSettings = () => {
                                 <option value="12:00">12:00 PM</option>
                                 <option value="13:00">1:00 PM</option>
                                 <option value="14:00">2:00 PM</option>
+                                <option value="15:50">3:50 PM</option>
                                 <option value="15:00">3:00 PM</option>
                                 <option value="16:00">4:00 PM</option>
                                 <option value="17:00">5:00 PM</option>
