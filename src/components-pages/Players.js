@@ -6,7 +6,7 @@ import { PastPlayerModal } from "./PastPlayerModal";
 
 const Players = () => {
 
-    const [availablePlayers, setAvailablePlayers] = useState([]);
+    const [allPlayers, setAllPlayers] = useState([]);
     const [pageNumber, setPageNumber] = useState(0);
     const [totalPages, setTotalPages] = useState();
     const [selectedPlayer, setSelectedPlayer] = useState();
@@ -28,14 +28,14 @@ const Players = () => {
         console.log(modalOpen);
     };
 
-    const getAvailablePlayers = () => {
+    const getAllPlayers = () => {
         const queryString = `/get-all-players?leagueName=${getLeagueName()}&pageNumber=${pageNumber}&pageSize=50`;
         
         request(
             "GET",
             queryString,
         ).then((response) => {
-            setAvailablePlayers(response.data.content);
+            setAllPlayers(response.data.content);
             setTotalPages(response.data.totalPages)
         }).catch((error) => {
             console.log(getLeagueName())
@@ -44,7 +44,7 @@ const Players = () => {
     }
 
     useEffect(() => {
-        getAvailablePlayers();
+        getAllPlayers();
         console.log("render counter");
     }, [pageNumber]) //runs when page number changes
 
@@ -61,7 +61,7 @@ const Players = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {availablePlayers.map((player) => (
+                        {allPlayers.map((player) => (
                             <tr key={player.id}>
                                 <th>
                                     <button onClick={() => openModal(player)} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target= {`#staticBackdrop${player.id}`}>
@@ -75,7 +75,7 @@ const Players = () => {
                     </tbody>
                 </table>
 
-                {availablePlayers.map((player) => (
+                {allPlayers.map((player) => (
                     <div
                         key={`modal-${player.id}`}
                         className="modal fade"

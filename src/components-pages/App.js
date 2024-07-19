@@ -13,6 +13,7 @@ import Matchup from './Matchup';
 import Players from './Players';
 import League from './League';
 import DraftSettings from './DraftSettings';
+import DraftUI from './DraftUI';
 
 function App() {
   
@@ -97,6 +98,7 @@ function App() {
                 {authenticated && <Route path="/players" element={<Players />} />}
                 {authenticated && <Route path="/league" element={<League />} />}
                 {authenticated && <Route path="/draft-settings" element={<DraftSettings />} />}
+                {authenticated && <Route path="/draft-ui" element={<DraftUI />} />}
               </Routes>
             </div>
           </div>
