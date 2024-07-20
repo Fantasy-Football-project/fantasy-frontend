@@ -31,13 +31,14 @@ const AuthContent = () => {
         }).catch(error => console.error('Logout error:', error));
     };
 
-    const getTeamName = () => {
-        const querystring = "/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())";
+    const getTeamName = ( leagueName ) => {
+        const querystring = `/get-team?leagueName=${leagueName}&username=${getUsername(getAuthToken())}`;
         request(
             "GET", // Get request
             querystring, 
         ).then((response) => {
-            return response;
+            const teamName = response.data.teamName;
+            return teamName;
         }).catch((error) => {
             console.error('Error fetching data:', error);
         });
@@ -56,7 +57,6 @@ const AuthContent = () => {
         ).then((response) => {
             if (Array.isArray(response.data)) {
                 setData(response.data); // updates the component's state with the fetched data if it's an array
-                console.log(response.data);
             } else {
                 console.error('Expected an array but got:', response.data);
                 setData([]); // fallback to empty array if the response is not an array
@@ -88,10 +88,10 @@ const AuthContent = () => {
                     <div>
                         <div>
                             <div class="modal-button">
-                                <button type="button" class="Size" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button style={{margin: "50px", fontSize: "30px"}} type="button" className="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     {league.leagueName}
                                     <p></p>
-                                    {league.leagueName} 
+                                    {getTeamName(league.leagueName)} 
                                 </button>
                             </div>
                         </div>
@@ -103,7 +103,7 @@ const AuthContent = () => {
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Team Name: {getTeamName()}</p>
+                                        <p>Team Name: {getTeamName(league.leagueName)}</p>
                                         <p>League Ranking: </p>
                                         <p>Join Code: {league.joinCode}</p>
                                     </div>

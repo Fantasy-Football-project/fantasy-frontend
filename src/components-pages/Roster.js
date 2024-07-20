@@ -113,10 +113,3 @@ const Roster = () => {
 }
 
 export default Roster;
-
-/*{Object.keys(draftOrder).map(key => (
-                        (key <= numTeams &&
-                        <li key={key}>
-                            Pick #{key} belongs to {draftOrder[key].teamName}
-                        </li>)
-                    ))}*/
