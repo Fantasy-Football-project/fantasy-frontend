@@ -7,17 +7,20 @@ import { Link, Route, Routes } from "react-router-dom";
 import { Button, Popover, OverlayTrigger } from 'react-bootstrap';
 import Navbar from "./AuthNavbar";
 import { setAuthToken } from "../axios_helper";
-import CreateLeague from "./CreateLeague";
-import JoinLeague from "./JoinLeague";
 
 let leagueName = "";
 
+export const settingLeagueName = (leagueName) => {
+    localStorage.setItem('leagueName', leagueName);
+};
+
 export const getLeagueName = () => {
-    return leagueName;
-}
+    return localStorage.getItem('leagueName');
+};
 
 const AuthContent = () => {
     const [data, setData] = useState([]);
+    const [draftStart, setDraftStart] = useState(false);
 
     const logout = () => {
         request(
@@ -125,9 +128,13 @@ const AuthContent = () => {
                         <h5 className="card-title">
                             {league.leagueName}
                         </h5>
+                        
+                        {league.draftStart === false && league.draftDate && 
+                            (<div>Draft Date: {new Date(league.draftDate).toLocaleString()}</div>)}
+                        
 
                         <div width="20px">
-                            <Link onClick={settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
+                            <Link id={`league${league.id}`} onClick={() => settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
                         </div>
 
                         <p>

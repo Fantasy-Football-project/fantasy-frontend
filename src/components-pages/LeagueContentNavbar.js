@@ -26,6 +26,14 @@ function LeagueContentNavbar() {
                         <Link to='/league'>League</Link>
                     </li>
 
+                    <li>
+                        <Link to='/draft-settings'>Draft Settings</Link>
+                    </li>
+
+                    <li>
+                        <Link to='/authorizedContent'>Exit</Link>
+                    </li>
+
                 </ul>  
             </div>
                       
