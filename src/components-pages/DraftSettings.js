@@ -87,9 +87,9 @@ const DraftSettings = () => {
         if (currentDate > selectedDate) {
             appendAlert("Invalid date. Choose a future date.", "danger");
         }
-        else if (!draftOrder.length) {
-            appendAlert("Set draft order before setting draft date.", "danger");
-        }
+        //else if (draftOrder.length === 0) {
+            //appendAlert("Set draft order before setting draft date.", "danger");
+        //}
         else {
             console.log(draftOrder);
             const queryString = `/set-draft-date?leagueName=${getLeagueName()}&draftDate=${selectedDate.toISOString()}`
@@ -99,6 +99,7 @@ const DraftSettings = () => {
             ).then((response) => {
                 console.log(response);
             }).catch((error) => {
+                appendAlert(error.response.data, "danger");
                 console.log(error);
             })
         }
@@ -189,7 +190,7 @@ const DraftSettings = () => {
                                 <option value="13:00">1:00 PM</option>
                                 <option value="14:00">2:00 PM</option>
                                 <option value="15:50">3:50 PM</option>
-                                <option value="15:00">3:00 PM</option>
+                                <option value="15:01">3:01 PM</option>
                                 <option value="16:00">4:00 PM</option>
                                 <option value="17:00">5:00 PM</option>
                                 <option value="18:00">6:00 PM</option>
