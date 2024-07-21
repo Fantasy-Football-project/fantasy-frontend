@@ -56,6 +56,7 @@ const DraftUI = () => {
             console.log(response);
             setAllAvailablePlayers(response.data);
             getTeamInfo();
+            getDraftOrder();
         }).catch((error) => {
             console.log(error);
         })
@@ -101,17 +102,39 @@ const DraftUI = () => {
         });
     }
 
+    //Pick #{key} belongs to {draftOrder[key].teamName}
     return(
         <div>
 
-            {Object.keys(draftOrder).map(key => (
-                <li key={key}>
-                    Pick #{key} belongs to {draftOrder[key].teamName}
-                </li>
-            ))}
+            <h5 style={{margin: "20px"}} className="container fw-bold">Upcoming Picks:</h5>
+            <div class="hstack gap-4">
+                {Object.keys(draftOrder).slice(0, 1).map(key => (
+                    //Mapping out the team currently drafting.
+                    <div key={key} className="card p-4 text-bg-success mb-3">
+                        <div className="card-title fw-bold">
+                            Pick #{key}:
+                        </div> 
+                        <div className="card-text">
+                            {draftOrder[key].teamName}
+                        </div>
+                    </div>
+                ))}
+                
+                {Object.keys(draftOrder).slice(1, 10).map(key => (
+                    //Mapping out the next 9 picks in the draft, and the team drafting with each pick respectfully.
+                    <div key={key} className="card p-4">
+                        <div className="card-title fw-bold">
+                            Pick #{key}:
+                        </div> 
+                        <div className="card-text">
+                            {draftOrder[key].teamName}
+                        </div>
+                    </div>
+                ))}
+            </div>
 
 
-            <div className="container text-center">
+            <div style={{margin: "20px"}} className="container text-center">
                 <div className="row">
                     <div className="col-2">
                         <table className="table table-bordered">
@@ -145,6 +168,7 @@ const DraftUI = () => {
                                     <tr key={player.id}>
                                         <th>
                                             <button 
+                                            style={{background: "purple", border: "purple"}}
                                             onClick={() => draftPlayer(player.fullName)} 
                                             type="button" className="btn btn-success"
                                             disabled={!isDraftTurn}
