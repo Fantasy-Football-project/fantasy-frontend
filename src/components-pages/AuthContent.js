@@ -67,13 +67,9 @@ const AuthContent = () => {
         });
     }, []); // Empty dependency array ensures this runs once after the initial render
 
-    const settingLeagueName = ( name ) => {
-        leagueName = name;
-    }
-
-    const count = 1;
-
     const handleEnterLeagueClick = (leagueName) => {
+        settingLeagueName(leagueName);
+        console.log(getLeagueName());
         window.location.href = `/roster?league=${leagueName}`;
     };
 

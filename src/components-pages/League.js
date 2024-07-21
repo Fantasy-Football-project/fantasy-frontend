@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const League = () => {
     const[leagueData, setLeagueData] = useState();
-    const[numberOfUsers, setNumberOfUsers] = useState();
+    const[rosterSize, setRosterSize] = useState(15);
     const[commissioner, setCommissioner] = useState();
     const navigate = useNavigate();
 
@@ -71,6 +71,20 @@ const League = () => {
        })
     }
 
+    const editRosterSize = () => {
+        const rosterSize = document.getElementById("size").value;
+        const queryString = `/edit-roster-size?leagueName=${getLeagueName()}&rosterSize=${rosterSize}`
+
+        request(
+            "PUT",
+            queryString
+        ).then((response) => {
+            setRosterSize(rosterSize);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
 
     return(
         <div>
@@ -78,7 +92,21 @@ const League = () => {
 
             {renderUsers()}
 
-            {commissioner && <button onClick={deleteLeague} type="button" class="btn btn-danger">Delete League</button>}
+            {commissioner && 
+            //For testing purposes. for a fast draft to test trading logic or sum.
+            <div>
+                <p>
+                    Enter roster size:
+                </p>
+                <select id="size" name="size" className="form-control">
+                    <option value="7">7</option>
+                </select>   
+
+                <button onClick={() => editRosterSize()} type="button" className="btn btn-info">Save</button>
+            </div>
+            }
+
+            {commissioner && <button style={{margin: "20px"}} onClick={deleteLeague} type="button" className="btn btn-danger">Delete League</button>}
         </div>
     )
 }
