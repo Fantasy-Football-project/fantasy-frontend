@@ -21,6 +21,7 @@ export const getLeagueName = () => {
 const AuthContent = () => {
     const [data, setData] = useState([]);
     const [draftStart, setDraftStart] = useState(false);
+    const [teamNames, setTeamNames] = useState({});
 
     const logout = () => {
         request(
@@ -31,18 +32,30 @@ const AuthContent = () => {
         }).catch(error => console.error('Logout error:', error));
     };
 
-    const getTeamName = ( leagueName ) => {
+    const getTeamName = ( leagueName, leagueID ) => {
         const querystring = `/get-team?leagueName=${leagueName}&username=${getUsername(getAuthToken())}`;
         request(
             "GET", // Get request
             querystring, 
         ).then((response) => {
-            const teamName = response.data.teamName;
-            return teamName;
+            setTeamNames((prevTeamNames) => (
+                {
+                    ...prevTeamNames,
+                    [leagueID]: response.data.teamName
+                }
+            ))
         }).catch((error) => {
             console.error('Error fetching data:', error);
         });
     }
+
+    useEffect(() => {
+        {data.map((league) => (
+            <div>
+                {getTeamName(league.leagueName, league.id)}
+            </div>
+        ))}
+    }, [data])
 
     //This useEffect hook is used to display the leagues the user is in.
     useEffect(() => {
@@ -79,78 +92,52 @@ const AuthContent = () => {
         }
 
         return (
-            <ul>
+            <div className="hstack gap-4">
                 {data.map((league) => (
                     <div>
                         <div>
                             <div class="modal-button">
-                                <button style={{margin: "50px", fontSize: "30px"}} type="button" className="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    {league.leagueName}
-                                    <p></p>
-                                    {getTeamName(league.leagueName)} 
+                                <button style={{margin: "50px", fontSize: "30px"}} type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal${league.id}`}>
+                                    Picture of football or some logo?
+                                    <div>
+                                        <div className="fw-bold">
+                                            League Name:
+                                        </div>
+                                        {league.leagueName}
+
+                                        <br/>
+                                        <div className="fw-bold">
+                                            Team Name:
+                                        </div>
+                                        {teamNames[league.id]} 
+                                    </div>
                                 </button>
                             </div>
                         </div>
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id={`exampleModal${league.id}`} tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">{league.leagueName}</h5>
+                                        <h5 class="modal-title" id={`exampleModal${league.id}`}>{league.leagueName}</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>Team Name: {getTeamName(league.leagueName)}</p>
+                                        <p>Team Name: {teamNames[league.id]}</p>
                                         <p>League Ranking: </p>
                                         <p>Join Code: {league.joinCode}</p>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" className="btn btn-primary" onClick={() => handleEnterLeagueClick(league.leagueName)} style={{ margin: "5px" }} data-bs-dismiss="modal">Enter League</button>
+                                        <button id={`btn-${league.id}`} type="button" className="btn btn-primary" onClick={() => handleEnterLeagueClick(league.leagueName)} style={{ margin: "5px" }} data-bs-dismiss="modal">Enter League</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 ))}
-            </ul>
+            </div>
         );
     }
 
-    const enterLeague = () => {
-
-    }
-
-    /*
-    <li key={league.id} className="card" style={{ width: "20rem", margin: "50px"}}>
-                        <h5 className="card-title">
-                            {league.leagueName}
-                        </h5>
-                        
-                        {league.draftStart === false && league.draftDate && 
-                            (<div>Draft Date: {new Date(league.draftDate).toLocaleString()}</div>)}
-                        
-
-                        <div width="20px">
-                            <Link id={`league${league.id}`} onClick={() => settingLeagueName(league.leagueName)} to="/roster" className="btn btn-primary" style={{margin: "5px"}}>Enter League</Link>
-                        </div>
-
-                        <p>
-                            {league.joinCode}
-                        </p>
-                        
-                        <div>
-                            {league.users.map(user => (
-                                <p key={user.id}>
-                                    {user.login}
-                                </p>
-                            ))}
-                        </div>
-                    </li>
-                    */
-    // What shows up visually, based on the component's state.
-    // "data" makes sure the data is not null/undefined. The rest maps over each element of data and prints it out in the <p> tag.
-    // If nothing is in the component's current state, nothing renders.
-
-    //Need to add to the create league url the user id that is creating the league.
     return (
         <div>
             <Navbar />
