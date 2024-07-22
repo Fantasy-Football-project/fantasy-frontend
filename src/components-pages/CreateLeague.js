@@ -73,6 +73,7 @@ const CreateLeague = () => {
                     <input id="league-name" className="form-control" type="text" placeholder="Default input" aria-label="default input example"></input>
                     <h1>Number of Teams</h1>
                     <select id="evenNumbers" name="evenNumbers" className="form-control">
+                        <option value="2">2</option>
                         <option value="4">4</option>
                         <option value="6">6</option>
                         <option value="8">8</option>
