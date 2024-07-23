@@ -203,6 +203,15 @@ const DraftUI = () => {
                                                 Remove
                                             </button>
                                             {player.position + ": " + player.fullName}
+                                            <br/>
+                                            <button 
+                                            style={{background: "purple", border: "purple"}}
+                                            onClick={() => draftPlayer(player.fullName)} 
+                                            type="button" className="btn btn-success"
+                                            disabled={!isDraftTurn}
+                                            >
+                                                Draft Player
+                                            </button>
                                         </th>
                                     </tr>
                                 ))}

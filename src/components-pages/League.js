@@ -71,40 +71,12 @@ const League = () => {
        })
     }
 
-    const editRosterSize = () => {
-        const rosterSize = document.getElementById("size").value;
-        const queryString = `/edit-roster-size?leagueName=${getLeagueName()}&rosterSize=${rosterSize}`
-
-        request(
-            "PUT",
-            queryString
-        ).then((response) => {
-            setRosterSize(rosterSize);
-        }).catch((error) => {
-            console.log(error);
-        })
-    }
-
 
     return(
         <div>
             <LeagueContentNavbar />
 
             {renderUsers()}
-
-            {commissioner && 
-            //For testing purposes. for a fast draft to test trading logic or sum.
-            <div>
-                <p>
-                    Enter roster size:
-                </p>
-                <select id="size" name="size" className="form-control">
-                    <option value="7">7</option>
-                </select>   
-
-                <button onClick={() => editRosterSize()} type="button" className="btn btn-info">Save</button>
-            </div>
-            }
 
             {commissioner && <button style={{margin: "20px"}} onClick={deleteLeague} type="button" className="btn btn-danger">Delete League</button>}
         </div>
