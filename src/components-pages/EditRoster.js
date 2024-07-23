@@ -21,7 +21,7 @@ export const EditRoster = () => {
     
     useEffect(() => {
         getTeam();
-    })
+    }, [])
     
     const getTeam = () => {
         const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
