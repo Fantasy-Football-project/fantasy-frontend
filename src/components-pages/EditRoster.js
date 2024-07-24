@@ -3,7 +3,16 @@ import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 
 export const EditRoster = () => {
-    const [numberOfPosition, setNumberOfPosition] = useState({});
+    const [numberOfPosition, setNumberOfPosition] = useState({
+        QB: 0,
+        RB: 0,
+        WR: 0,
+        TE: 0,
+        FLEX: 0,
+        K: 0,
+        DST: 0,
+        BE: 0
+    });
     const [startingPlayers, setStartingPlayers] = useState({
         QB: [],
         RB: [],
@@ -18,6 +27,7 @@ export const EditRoster = () => {
     const [viewSwap, setViewSwap] = useState(false);
     const [playerOneId, setPlayerOneId] = useState();
     const [playerTwoId, setPlayerTwoId] = useState(null);
+    const [positionParameter, setPositionParameter] = useState(null);
     
     useEffect(() => {
         getTeam();
@@ -30,8 +40,19 @@ export const EditRoster = () => {
             "GET",
             queryString
         ).then((response) => {
-            if (response.data.bench.length > setNumberOfPosition["BE"]) {
-                setNumberOfPosition["BE"] = response.data.bench.length;
+            console.log(response.data.bench.length)
+            console.log(numberOfPosition["BE"])
+            if (response.data.bench.length > numberOfPosition["BE"]) {
+                setNumberOfPosition({
+                    QB: numberOfPosition["QB"],
+                    RB: numberOfPosition["RB"],
+                    WR: numberOfPosition["WR"],
+                    TE: numberOfPosition["TE"],
+                    FLEX: numberOfPosition["FLEX"],
+                    K: numberOfPosition["K"],
+                    DST: numberOfPosition["DST"],
+                    BE: response.data.bench.length
+                });
             }
             setStartingPlayers({
                 QB: response.data.startingQB,
@@ -64,16 +85,25 @@ export const EditRoster = () => {
                 FLEX: response.data.numberOfStarters.FLEX,
                 K: response.data.numberOfStarters.K,
                 DST: response.data.numberOfStarters.DST,
-                BE: response.data.numberOfStarters.BE
+                BE: response.data.numberOfStarters.BE,
             });
         }).catch((error) => {
             console.error('Error fetching data:', error);
         });
     }, []);
 
-    const findAllowedSwap = ( id ) => {
+    const findAllowedSwap = ( id, position ) => {
         setPlayerOneId(id);
-        const queryString = `/find-allowed-swaps?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&playerId=${id}`;
+        let queryString = ``;
+        if (id) {
+            setPlayerOneId(id);
+            queryString = `/find-allowed-swaps?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&playerId=${id}&position=${position}`;
+        }
+        else {
+            setPositionParameter(position);
+            queryString = `/find-allowed-swaps?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&position=${position}`;
+        }
+        
 
         request(
             "GET",
@@ -85,12 +115,6 @@ export const EditRoster = () => {
         }).catch((error) => {
             console.log(error);
         })
-
-        return(
-            <div>
-                
-            </div>
-        )
     }
 
     const renderPositionRows = (position, players) => {
@@ -100,7 +124,7 @@ export const EditRoster = () => {
             return (
                 <tr key={`${position}-${index}`}>
                     <th>
-                        <button onClick={() => findAllowedSwap(player.id)}>Swap</button>
+                        <button onClick={() => player ? findAllowedSwap(player.id, null) : findAllowedSwap(null, position)}>Swap</button>
                     </th>
                     <th>{position}</th>
                     <th>{player ? player.fullName : ""} {updateCounter(position)}</th>
@@ -146,14 +170,15 @@ export const EditRoster = () => {
         }
     }
 
-    /*useEffect(() => {
-        if (playerTwoId !== null) {
-            swap(playerTwoId);
-        }
-    }, [])*/
-
     const swap = ( idTwo ) => {
-        const queryString = `/swap-lineup?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&playerIdOne=${playerOneId}&playerIdTwo=${idTwo}`
+        let queryString = `/swap-lineup?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&playerIdOne=${playerOneId}&playerIdTwo=${idTwo}`;
+
+        if (playerOneId !== null) {
+            queryString = `/swap-lineup?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&playerIdOne=${playerOneId}&playerIdTwo=${idTwo}`;
+        }
+        else {
+            queryString = `/swap-lineup?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&playerIdTwo=${idTwo}&position=${positionParameter}`;
+        }
 
         request(
             "PUT",

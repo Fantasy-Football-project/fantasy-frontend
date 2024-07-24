@@ -21,10 +21,9 @@ const Roster = () => {
         BE: []
     })
     
-    const [bench, setBench] = useState([]);
-
     useEffect(() => {
         getTeam();
+        getLeagueInfo();
     }, [])
 
     const getTeam = () => {
@@ -37,6 +36,19 @@ const Roster = () => {
             const allPicks = response.data.allPicks;
             allPicks.sort((a, b) => a - b);
             setDraftPicks(allPicks);
+            getLeagueInfo();
+            if (response.data.bench.length > numberOfPosition["BE"]) {
+                setNumberOfPosition({
+                    QB: numberOfPosition["QB"],
+                    RB: numberOfPosition["RB"],
+                    WR: numberOfPosition["WR"],
+                    TE: numberOfPosition["TE"],
+                    FLEX: numberOfPosition["FLEX"],
+                    K: numberOfPosition["K"],
+                    DST: numberOfPosition["DST"],
+                    BE: response.data.bench.length
+                });
+            }
             setStartingPlayers({
                 QB: response.data.startingQB,
                 RB: response.data.startingRB,
@@ -47,16 +59,12 @@ const Roster = () => {
                 DST: response.data.startingDST,
                 BE: response.data.bench
             })
-            if (response.data.bench.length > setNumberOfPosition["BE"]) {
-                setNumberOfPosition["BE"] = response.data.bench.length;
-            }
-
         }).catch((error) => {
             console.log(error);
         })
     }
 
-    useEffect(() => {
+    const getLeagueInfo = () => {
         const querystring = `/get-league?leagueName=${getLeagueName()}`;
 
         request(
@@ -77,7 +85,7 @@ const Roster = () => {
         }).catch((error) => {
             console.error('Error fetching data:', error);
         });
-    }, []);
+    };
 
     useEffect(() => {
         const queryString = `/get-roster?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
@@ -190,7 +198,7 @@ const Roster = () => {
 
             {rosterLayout()}
 
-            <div class="modal fade" id="editLineup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editLineup" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
