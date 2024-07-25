@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
-import LeagueContentNavbar from "./LeagueContentNavbar";
-import { EditRoster } from "./EditRoster";
 
-const Roster = () => {
-    const [roster, setRoster] = useState([]);
-    const [rosterByPosition, setRosterByPosition] = useState({});
-    const [draftDone, setDraftDone] = useState();
-    const [draftPicks, setDraftPicks] = useState([]);
+export const AddAndDropPlayer = ( {idToAdd} ) => {
     const [numberOfPosition, setNumberOfPosition] = useState({});
     const [startingPlayers, setStartingPlayers] = useState({
         QB: [],
@@ -23,6 +17,7 @@ const Roster = () => {
     
     useEffect(() => {
         getTeam();
+        getLeagueInfo();
     }, [])
 
     const getTeam = () => {
@@ -32,9 +27,7 @@ const Roster = () => {
             "GET",
             queryString
         ).then((response) => {
-            const allPicks = response.data.allPicks;
-            allPicks.sort((a, b) => a - b);
-            setDraftPicks(allPicks);
+            getLeagueInfo();
             if (response.data.bench.length > numberOfPosition["BE"]) {
                 setNumberOfPosition({
                     QB: numberOfPosition["QB"],
@@ -62,14 +55,13 @@ const Roster = () => {
         })
     }
 
-    useEffect(() => {
+    const getLeagueInfo = () => {
         const querystring = `/get-league?leagueName=${getLeagueName()}`;
 
         request(
             "GET",
             querystring,
         ).then((response) => {
-            setDraftDone(response.data.draftDone);
             setNumberOfPosition({
                 QB: response.data.numberOfStarters.QB,
                 RB: response.data.numberOfStarters.RB,
@@ -83,29 +75,35 @@ const Roster = () => {
         }).catch((error) => {
             console.error('Error fetching data:', error);
         });
-    }, []) 
-
-    useEffect(() => {
-        const queryString = `/get-roster?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
-
-        request(
-            "GET",
-            queryString
-        ).then((response) => {
-            console.log(response.data)
-            setRoster(response.data);
-        }).catch((error) => {
-            console.log(error);
-        })
-    }, [])
+    };
 
     const rosterLayout = () => {
+        const addAndDropPlayer = ( dropId ) => {
+            const queryString = `/add-and-drop-players?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}&playerIdAdd=${idToAdd}&playerIdDrop=${dropId}`;
+
+            request(
+                "PUT",
+                queryString
+            ).then((response) => {
+                console.log(response.data);
+                getTeam();
+                window.location.href = '/roster';
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
         //Helper method to render each row based on the position
         const renderPositionRows = (position, players) => {
             return Array.from({ length: numberOfPosition[position] }).map((_, index) => {
                 const player = players[index];
                 return (
                     <tr key={`${position}-${index}`}>
+                        <th>
+                            <button onClick={() => addAndDropPlayer(player.id)} type="button" className="btn btn-danger">
+                                -
+                            </button>
+                        </th>
                         <th>{position}</th>
                         <th>{player ? player.fullName : ""} {updateCounter(position)}</th>
                     </tr>
@@ -133,11 +131,9 @@ const Roster = () => {
                 <table id="rosterLayout" className="table table-bordered border-dark" style={{margin: "10px"}}>
                     <thead>
                         <tr>
+                            <th className="col-1"></th>
                             <th className="col-1">Position</th>
                             <th className="col-2">Player</th>
-                            <th>Score</th>
-                            <th>Season Total</th>
-                            <th>Trade</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -150,73 +146,9 @@ const Roster = () => {
         );
     }
 
-    const renderDraftPicks = () => {
-        return(
-            <div>
-                <ul class="list-group">
-                    {draftPicks.map(pick => (
-                        <div key={pick}>
-                            <li class="list-group-item">{pick}</li>
-                        </div>
-                    ))}
-                </ul>
-            </div>
-        );
-    }
-
     return(
         <div>
-            <LeagueContentNavbar />
-
-            {!draftDone && <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#draftPicks">
-                View Draft Picks
-            </button>}
-
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editLineup">
-                Edit Lineup
-            </button>
-
-            <button style={{margin: "10px"}} onClick={() => getTeam()}>
-                Reload Roster
-            </button>
-
             {rosterLayout()}
-
-            <div class="modal fade" id="editLineup" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">All Draft Picks</h1>
-                            <button onClick={() => getTeam()} type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <EditRoster />
-                        </div>
-                        <div class="modal-footer">
-                            <button onClick={() => getTeam()} type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="draftPicks" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">All Draft Picks</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            {renderDraftPicks()}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
-
-export default Roster;
