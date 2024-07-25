@@ -8,6 +8,7 @@ const DraftSettings = () => {
     const [draftOrder, setDraftOrder] = useState([]);
     const [numTeams, setNumTeams] = useState();
     const [draftDate, setDraftDate] = useState(null);
+    const [draftDone, setDraftDone] = useState(false);
 
     const[commissioner, setCommissioner] = useState();
 
@@ -48,6 +49,7 @@ const DraftSettings = () => {
         ).then((response) => {
             setDraftOrder(response.data.draftOrder);
             setNumTeams(response.data.numTeams);
+            setDraftDone(response.data.draftDone);
 
             if (response.data.draftDate !== null) {
                 const newDraftDate = new Date(response.data.draftDate);
@@ -122,14 +124,14 @@ const DraftSettings = () => {
             
             {draftDate !== null && (<h3>Draft Date: {draftDate}</h3>)}
 
-            {renderDraftOrder()}
+            {!draftDone && renderDraftOrder()}
 
-            {commissioner && 
+            {commissioner && !draftDone &&
                 <button onClick={randomizeDraftOrder} type="button" className="btn btn-info">Randomize Draft Order</button>}
 
-            <Link to='/draft-ui' type="button" class="btn btn-info">Enter Draft</Link>
+            {!draftDone && <Link to='/draft-ui' type="button" class="btn btn-info">Enter Draft</Link>}
 
-            {commissioner &&
+            {commissioner && !draftDone &&
             <button style={{ margin: "10px" }} type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Edit Draft Time
             </button>}
