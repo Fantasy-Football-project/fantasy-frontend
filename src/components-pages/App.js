@@ -14,6 +14,7 @@ import Players from './Players';
 import League from './League';
 import DraftSettings from './DraftSettings';
 import DraftUI from './DraftUI';
+import { DropPlayer } from './AddAndDropPlayer';
 
 function App() {
   
