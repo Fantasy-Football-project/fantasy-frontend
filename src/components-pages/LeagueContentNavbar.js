@@ -31,6 +31,10 @@ function LeagueContentNavbar() {
                     </li>
 
                     <li>
+                        <Link to='/view-all-teams'>View All Teams</Link>
+                    </li>
+
+                    <li>
                         <Link to='/authorizedContent'>Exit</Link>
                     </li>
 

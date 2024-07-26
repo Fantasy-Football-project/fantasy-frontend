@@ -15,6 +15,7 @@ import League from './League';
 import DraftSettings from './DraftSettings';
 import DraftUI from './DraftUI';
 import { DropPlayer } from './AddAndDropPlayer';
+import { ViewAllTeams } from './ViewAllTeams';
 
 function App() {
   
@@ -100,6 +101,7 @@ function App() {
                 {authenticated && <Route path="/league" element={<League />} />}
                 {authenticated && <Route path="/draft-settings" element={<DraftSettings />} />}
                 {authenticated && <Route path="/draft-ui" element={<DraftUI />} />}
+                {authenticated && <Route path="/view-all-teams" element={<ViewAllTeams />} />}
               </Routes>
             </div>
           </div>
