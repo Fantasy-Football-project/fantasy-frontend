@@ -16,6 +16,8 @@ import DraftSettings from './DraftSettings';
 import DraftUI from './DraftUI';
 import { DropPlayer } from './AddAndDropPlayer';
 import { ViewAllTeams } from './ViewAllTeams';
+import { TradeUI } from './TradeUI';
+import { TradeReview } from './TradeReview';
 
 function App() {
   
@@ -102,6 +104,8 @@ function App() {
                 {authenticated && <Route path="/draft-settings" element={<DraftSettings />} />}
                 {authenticated && <Route path="/draft-ui" element={<DraftUI />} />}
                 {authenticated && <Route path="/view-all-teams" element={<ViewAllTeams />} />}
+                {authenticated && <Route path="/trade-ui" element={<TradeUI />} />}
+                {authenticated && <Route path="/trade-review" element={<TradeReview />} />}
               </Routes>
             </div>
           </div>

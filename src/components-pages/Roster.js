@@ -3,10 +3,9 @@ import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { EditRoster } from "./EditRoster";
+import { OutogingTradeRequests } from "./OutoingTradeRequests";
 
 const Roster = () => {
-    const [roster, setRoster] = useState([]);
-    const [rosterByPosition, setRosterByPosition] = useState({});
     const [draftDone, setDraftDone] = useState();
     const [draftPicks, setDraftPicks] = useState([]);
     const [numberOfPosition, setNumberOfPosition] = useState({});
@@ -19,9 +18,12 @@ const Roster = () => {
         K: [],
         DST: [],
         BE: []
-    })
+    });
+    const [teamInfo, setTeamInfo] = useState();
+    const [viewOutoing, setViewOutgoing] = useState(false);
     
     useEffect(() => {
+        leagueInfo();
         getTeam();
     }, [])
 
@@ -36,6 +38,7 @@ const Roster = () => {
             allPicks.sort((a, b) => a - b);
             setDraftPicks(allPicks);
             if (response.data.bench.length > numberOfPosition["BE"]) {
+                console.log("heree")
                 setNumberOfPosition({
                     QB: numberOfPosition["QB"],
                     RB: numberOfPosition["RB"],
@@ -57,12 +60,14 @@ const Roster = () => {
                 DST: response.data.startingDST,
                 BE: response.data.bench
             })
+
+            setTeamInfo(response.data);
         }).catch((error) => {
             console.log(error);
         })
     }
 
-    useEffect(() => {
+    const leagueInfo = () => {
         const querystring = `/get-league?leagueName=${getLeagueName()}`;
 
         request(
@@ -83,21 +88,7 @@ const Roster = () => {
         }).catch((error) => {
             console.error('Error fetching data:', error);
         });
-    }, []) 
-
-    useEffect(() => {
-        const queryString = `/get-roster?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
-
-        request(
-            "GET",
-            queryString
-        ).then((response) => {
-            console.log(response.data)
-            setRoster(response.data);
-        }).catch((error) => {
-            console.log(error);
-        })
-    }, [])
+    }
 
     const rosterLayout = () => {
         //Helper method to render each row based on the position
@@ -130,7 +121,7 @@ const Roster = () => {
 
         return(
             <div>
-                <table id="rosterLayout" className="table table-bordered border-dark" style={{margin: "10px"}}>
+                <table id="rosterLayout" className="table table-bordered table-striped border-dark" style={{margin: "10px"}}>
                     <thead>
                         <tr>
                             <th className="col-1">Position</th>
@@ -176,8 +167,8 @@ const Roster = () => {
                 Edit Lineup
             </button>
 
-            <button style={{margin: "10px"}} onClick={() => getTeam()}>
-                Reload Roster
+            <button style={{margin: "10px"}} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outgoingTrades" onClick={() => setViewOutgoing(true)}>
+                View Outgoing Trade Requests
             </button>
 
             {rosterLayout()}
@@ -211,6 +202,23 @@ const Roster = () => {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="outgoingTrades" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Outgoing Trade Requests</h1>
+                            <button onClick={() => getTeam()} type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {viewOutoing && <OutogingTradeRequests teamInfo={teamInfo}/>}
+                        </div>
+                        <div class="modal-footer">
+                            <button onClick={() => getTeam()} type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>

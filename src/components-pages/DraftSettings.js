@@ -198,7 +198,7 @@ const DraftSettings = () => {
                                 <option value="21:00">9:00 PM</option>
                                 <option value="22:00">10:00 PM</option>
                                 <option value="23:00">11:00 PM</option>
-                            </select>                                
+                            </select>
                             
                             <button 
                             onClick={editDraftTime} 
