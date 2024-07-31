@@ -12,7 +12,7 @@ import Roster from './Roster';
 import Matchup from './Matchup';
 import Players from './Players';
 import League from './League';
-import DraftSettings from './DraftSettings';
+import { DraftSettings } from './DraftSettings';
 import DraftUI from './DraftUI';
 import { DropPlayer } from './AddAndDropPlayer';
 import { ViewAllTeams } from './ViewAllTeams';

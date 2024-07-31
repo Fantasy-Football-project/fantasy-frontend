@@ -25,8 +25,8 @@ const Roster = () => {
     const [viewIncoming, setViewIncoming] = useState(false);
     
     useEffect(() => {
-        leagueInfo();
         getTeam();
+        leagueInfo();
     }, [])
 
     const getTeam = () => {
@@ -39,19 +39,6 @@ const Roster = () => {
             const allPicks = response.data.allPicks;
             allPicks.sort((a, b) => a - b);
             setDraftPicks(allPicks);
-            if (response.data.bench.length > numberOfPosition["BE"]) {
-                console.log("heree")
-                setNumberOfPosition({
-                    QB: numberOfPosition["QB"],
-                    RB: numberOfPosition["RB"],
-                    WR: numberOfPosition["WR"],
-                    TE: numberOfPosition["TE"],
-                    FLEX: numberOfPosition["FLEX"],
-                    K: numberOfPosition["K"],
-                    DST: numberOfPosition["DST"],
-                    BE: response.data.bench.length
-                });
-            }
             setStartingPlayers({
                 QB: response.data.startingQB,
                 RB: response.data.startingRB,
@@ -70,6 +57,18 @@ const Roster = () => {
     }
 
     const leagueInfo = () => {
+        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
+        let teamId = -1;
+
+        request(
+            "GET",
+            queryString
+        ).then((response) => {
+            teamId = response.data.id;
+        }).catch((error) => {
+            console.log(error);
+        })
+
         const querystring = `/get-league?leagueName=${getLeagueName()}`;
 
         request(
@@ -77,6 +76,16 @@ const Roster = () => {
             querystring,
         ).then((response) => {
             setDraftDone(response.data.draftDone);
+            console.log(response.data);
+
+            let benchSize = 0;
+
+            response.data.teams.forEach((team) => {
+                if (teamId === team.id) {
+                    benchSize = team.bench.length;
+                }
+            })
+
             setNumberOfPosition({
                 QB: response.data.numberOfStarters.QB,
                 RB: response.data.numberOfStarters.RB,
@@ -85,7 +94,7 @@ const Roster = () => {
                 FLEX: response.data.numberOfStarters.FLEX,
                 K: response.data.numberOfStarters.K,
                 DST: response.data.numberOfStarters.DST,
-                BE: response.data.numberOfStarters.BE
+                BE: benchSize
             });
         }).catch((error) => {
             console.error('Error fetching data:', error);
