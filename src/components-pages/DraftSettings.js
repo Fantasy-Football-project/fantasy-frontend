@@ -4,7 +4,26 @@ import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import { Link } from "react-router-dom";
 
-const DraftSettings = () => {
+export const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
+export const appendAlert = (message, type) => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('');
+
+    alertPlaceholder.append(wrapper);
+
+    if (!alertPlaceholder) {
+        console.error('Alert placeholder element not found!');
+        return;
+    }
+}
+
+export const DraftSettings = () => {
     const [draftOrder, setDraftOrder] = useState([]);
     const [numTeams, setNumTeams] = useState();
     const [draftDate, setDraftDate] = useState(null);
@@ -104,20 +123,6 @@ const DraftSettings = () => {
         }
     }
 
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-
-    const appendAlert = (message, type) => {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}</div>`,
-            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-            '</div>'
-        ].join('');
-
-        alertPlaceholder.append(wrapper);
-    }
-
     return(
         <div>
             <LeagueContentNavbar />
@@ -215,4 +220,4 @@ const DraftSettings = () => {
     )
 }
 
-export default DraftSettings;
+//export default DraftSettings;
