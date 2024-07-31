@@ -35,6 +35,10 @@ function LeagueContentNavbar() {
                     </li>
 
                     <li>
+                        <Link to='/recent-activity'>Recent Activity</Link>
+                    </li>
+
+                    <li>
                         <Link to='/authorizedContent'>Exit</Link>
                     </li>
 

@@ -18,6 +18,7 @@ import { DropPlayer } from './AddAndDropPlayer';
 import { ViewAllTeams } from './ViewAllTeams';
 import { TradeUI } from './TradeUI';
 import { TradeReview } from './TradeReview';
+import { RecentActivity } from './RecentActivity';
 
 function App() {
   
@@ -106,6 +107,7 @@ function App() {
                 {authenticated && <Route path="/view-all-teams" element={<ViewAllTeams />} />}
                 {authenticated && <Route path="/trade-ui" element={<TradeUI />} />}
                 {authenticated && <Route path="/trade-review" element={<TradeReview />} />}
+                {authenticated && <Route path="/recent-activity" element={<RecentActivity />} />}
               </Routes>
             </div>
           </div>

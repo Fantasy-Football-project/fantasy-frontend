@@ -4,6 +4,7 @@ import { getAuthToken, getUsername, request } from "../axios_helper";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { EditRoster } from "./EditRoster";
 import { OutogingTradeRequests } from "./OutoingTradeRequests";
+import { IncomingTradeRequests } from "./IncomingTradeRequests";
 
 const Roster = () => {
     const [draftDone, setDraftDone] = useState();
@@ -21,6 +22,7 @@ const Roster = () => {
     });
     const [teamInfo, setTeamInfo] = useState();
     const [viewOutoing, setViewOutgoing] = useState(false);
+    const [viewIncoming, setViewIncoming] = useState(false);
     
     useEffect(() => {
         leagueInfo();
@@ -163,8 +165,12 @@ const Roster = () => {
                 View Draft Picks
             </button>}
 
-            <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editLineup">
+            <button onClick={() => getTeam()} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editLineup">
                 Edit Lineup
+            </button>
+
+            <button style={{margin: "10px"}} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomingTrades" onClick={() => setViewIncoming(true)}>
+                View Incoming Trade Requests
             </button>
 
             <button style={{margin: "10px"}} type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#outgoingTrades" onClick={() => setViewOutgoing(true)}>
@@ -202,6 +208,23 @@ const Roster = () => {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="incomingTrades" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Incoming Trade Requests</h1>
+                            <button onClick={() => getTeam()} type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {viewIncoming && <IncomingTradeRequests teamInfo={teamInfo}/>}
+                        </div>
+                        <div class="modal-footer">
+                            <button onClick={() => getTeam()} type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
