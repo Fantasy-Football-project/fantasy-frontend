@@ -4,6 +4,7 @@ import { getAuthToken, getUsername, request } from "../axios_helper";
 import { getLeagueName } from "./AuthContent";
 import { PastPlayerModal } from "./PastPlayerModal";
 import { AddAndDropPlayer, DropPlayer } from "./AddAndDropPlayer";
+import { appendAlert } from "./DraftSettings";
 
 const Players = () => {
 
@@ -111,7 +112,7 @@ const Players = () => {
                 queryString
             ).then((response) => {
                 console.log(response.data);
-                //success alert that player was added.
+                appendAlert("Player added.", "success")
             })
         }
         else {
@@ -119,6 +120,14 @@ const Players = () => {
             setPlayerToAddId(id);
             setPlayerToAdd(fullName);
         }
+    }
+
+    const dropPlayer = ( id , fullName ) => {
+        //NEED TO IMPLEMENT
+    }
+
+    const tradeForPlayer = ( id , fullName ) => {
+        //NEED TO IMPLEMENT
     }
 
     const checkIfPlayerIsOnRoster = ( id ) => {
@@ -182,7 +191,7 @@ const Players = () => {
                                     //Should add an 'Are you sure?' type of question to adding the player.
                                         draftDone && checkIfPlayerIsOnRoster(player.id) && 
                                         <th>
-                                            <button onClick={() => addPlayer(player.id, player.fullName)} id={`add-player${player.id}`} type="button" className="btn btn-danger">
+                                            <button onClick={() => dropPlayer(player.id, player.fullName)} id={`add-player${player.id}`} type="button" className="btn btn-danger">
                                                 -
                                             </button>    
                                         </th>
@@ -191,13 +200,13 @@ const Players = () => {
                                     {
                                         draftDone && checkIfPlayerIsOnDifferentRoster(player.id) && !checkIfPlayerIsOnRoster(player.id) &&
                                         <th>
-                                            <button onClick={() => addPlayer(player.id, player.fullName)} id={`add-player${player.id}`} type="button" className="btn btn-warning">
+                                            <button onClick={() => tradeForPlayer(player.id, player.fullName)} id={`add-player${player.id}`} type="button" className="btn btn-warning">
                                                 trade
                                             </button>    
                                         </th>
                                     }
 
-    {
+                                    {
                                         draftDone && !checkIfPlayerIsOnDifferentRoster(player.id) &&
                                         <th>
                                             <button onClick={() => addPlayer(player.id, player.fullName)} id={`add-player${player.id}`} type="button" className="btn btn-success">
