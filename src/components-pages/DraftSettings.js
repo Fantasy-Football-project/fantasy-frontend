@@ -4,9 +4,14 @@ import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import { Link } from "react-router-dom";
 
-export const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-
 export const appendAlert = (message, type) => {
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+
+    if (!alertPlaceholder) {
+        console.error('Alert placeholder element not found!');
+        return;
+    }
+
     const wrapper = document.createElement('div');
     wrapper.innerHTML = [
         `<div class="alert alert-${type} alert-dismissible" role="alert">`,
@@ -16,11 +21,6 @@ export const appendAlert = (message, type) => {
     ].join('');
 
     alertPlaceholder.append(wrapper);
-
-    if (!alertPlaceholder) {
-        console.error('Alert placeholder element not found!');
-        return;
-    }
 }
 
 export const DraftSettings = () => {

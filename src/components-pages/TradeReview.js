@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import { navigateToTradeUI } from "./ViewAllTeams";
 import { getLeagueName } from "./AuthContent";
-import { alertPlaceholder, appendAlert } from "./DraftSettings";
+import { appendAlert } from "./DraftSettings";
 
 export const TradeReview = () => {
 
@@ -65,8 +65,8 @@ export const TradeReview = () => {
                 <LeagueContentNavbar />
 
                 <div className="card text-center container" style={{width: "500px", alignItems: true}}>
-                    <div id="liveAlertPlaceholder"></div>
                     <div class="card-body center">
+                    <div id="liveAlertPlaceholder"></div>
                         <h3 class="card-title">Trade Review</h3>
                         {teamTwoInfo && <h4 class="card-subtitle mb-2 text-body-secondary">Trade with {teamTwoInfo.teamName}</h4>}
                         <br/>

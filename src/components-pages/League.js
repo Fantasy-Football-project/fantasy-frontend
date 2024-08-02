@@ -8,7 +8,38 @@ const League = () => {
     const[leagueData, setLeagueData] = useState();
     const[rosterSize, setRosterSize] = useState(15);
     const[commissioner, setCommissioner] = useState();
+    const [leagueSchedule, setLeagueSchedule] = useState({});
     const navigate = useNavigate();
+
+    useEffect(() => {
+        getLeagueMatchups();
+    }, [])
+
+    const getLeagueMatchups = () => {
+        const queryString = `/get-all-leagues-matchups?leagueName=${getLeagueName()}`;
+
+        request(
+            "GET",
+            queryString
+        ).then((response) => {
+            console.log(response.data);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    const randomizeSchedule = () => {
+        const queryString = `/randomize-league-matchups?leagueName=${getLeagueName()}`;
+
+        request(
+            "PUT",
+            queryString
+        ).then((response) => {
+            console.log(response.data);
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
 
     useEffect(() => {
         const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
@@ -18,6 +49,7 @@ const League = () => {
             queryString
         ).then((response) => {
             setCommissioner(response.data.commissioner);
+            console.log(response.data.opponent)
         }).catch((error) => {
             console.log(error);
         })
@@ -40,21 +72,6 @@ const League = () => {
         });
     }, []); // Empty dependency array ensures this runs once after the initial render
 
-    //This function is to display all the league members in the league
-    const renderUsers = () => {
-        return (
-            <ul>
-                {leagueData?.users.map((user) => (
-                    <li key={user.id} className="card" style={{ width: "20rem", margin: "50px"}}>      
-                        <p>
-                            {user.login}
-                        </p>
-                    </li>
-                ))}
-            </ul>
-        );
-    }
-
     //NEED TO ADD AN "ARE YOU SURE" MODAL
     const deleteLeague = () => {
        const queryString = `/delete-league?leagueName=${getLeagueName()}`
@@ -76,7 +93,7 @@ const League = () => {
         <div>
             <LeagueContentNavbar />
 
-            {renderUsers()}
+            {commissioner && <button onClick={() => randomizeSchedule()}>randomize schedule</button>}
 
             {commissioner && <button style={{margin: "20px"}} onClick={deleteLeague} type="button" className="btn btn-danger">Delete League</button>}
         </div>
