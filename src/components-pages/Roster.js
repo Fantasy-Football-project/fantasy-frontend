@@ -6,6 +6,24 @@ import { EditRoster } from "./EditRoster";
 import { OutogingTradeRequests } from "./OutoingTradeRequests";
 import { IncomingTradeRequests } from "./IncomingTradeRequests";
 
+export const setTeamInfo = (teamInfo) => {
+    localStorage.setItem('teamInfo', JSON.stringify(teamInfo));
+};
+
+export const getTeamInfo = () => {
+    const teamInfo = localStorage.getItem('teamInfo');
+    return teamInfo ? JSON.parse(teamInfo) : null;
+};
+
+export const setLeagueInfo = (leagueInfo) => {
+    localStorage.setItem('leagueInfo', JSON.stringify(leagueInfo));
+};
+
+export const getLeagueInfo = () => {
+    const leagueInfo = localStorage.getItem('leagueInfo');
+    return leagueInfo ? JSON.parse(leagueInfo) : null;
+};
+
 const Roster = () => {
     const [draftDone, setDraftDone] = useState();
     const [draftPicks, setDraftPicks] = useState([]);
@@ -20,7 +38,6 @@ const Roster = () => {
         DST: [],
         BE: []
     });
-    const [teamInfo, setTeamInfo] = useState();
     const [viewOutoing, setViewOutgoing] = useState(false);
     const [viewIncoming, setViewIncoming] = useState(false);
     
@@ -96,6 +113,8 @@ const Roster = () => {
                 DST: response.data.numberOfStarters.DST,
                 BE: benchSize
             });
+
+            setLeagueInfo(response.data);
         }).catch((error) => {
             console.error('Error fetching data:', error);
         });
@@ -230,7 +249,7 @@ const Roster = () => {
                             <button onClick={() => getTeam()} type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            {viewIncoming && <IncomingTradeRequests teamInfo={teamInfo}/>}
+                            {viewIncoming && <IncomingTradeRequests teamInfo={getTeamInfo()}/>}
                         </div>
                         <div class="modal-footer">
                             <button onClick={() => getTeam()} type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -247,7 +266,7 @@ const Roster = () => {
                             <button onClick={() => getTeam()} type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            {viewOutoing && <OutogingTradeRequests teamInfo={teamInfo}/>}
+                            {viewOutoing && <OutogingTradeRequests teamInfo={getTeamInfo()}/>}
                         </div>
                         <div class="modal-footer">
                             <button onClick={() => getTeam()} type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

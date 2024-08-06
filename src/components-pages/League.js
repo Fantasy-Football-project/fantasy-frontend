@@ -3,12 +3,13 @@ import { getAuthToken, getUsername, request } from "../axios_helper";
 import { getLeagueName } from "./AuthContent";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { useNavigate } from "react-router-dom";
+import { getTeamInfo } from "./Roster";
 
 const League = () => {
     const[leagueData, setLeagueData] = useState();
-    const[rosterSize, setRosterSize] = useState(15);
-    const[commissioner, setCommissioner] = useState();
+    const[commissioner, setCommissioner] = useState(getTeamInfo().commissioner);
     const [leagueSchedule, setLeagueSchedule] = useState({});
+    const [currentTeamSchedule, setCurrentTeamSchedule] = useState({});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,6 +24,7 @@ const League = () => {
             queryString
         ).then((response) => {
             console.log(response.data);
+            setLeagueSchedule(response.data);
         }).catch((error) => {
             console.log(error);
         })
@@ -41,20 +43,6 @@ const League = () => {
         })
     }
 
-    useEffect(() => {
-        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
-
-        request(
-            "GET",
-            queryString
-        ).then((response) => {
-            setCommissioner(response.data.commissioner);
-            console.log(response.data.opponent)
-        }).catch((error) => {
-            console.log(error);
-        })
-    })
-    
     //This useEffect hook is used to display the leagues the user is in.
     useEffect(() => {
         //This string is to pass in the requestparam needed for the '/leagues' GET method.
@@ -88,6 +76,45 @@ const League = () => {
        })
     }
 
+    const getLeagueScheduleHelper = ( weekNumber) => {
+        return Array.from({ length: leagueSchedule[weekNumber].teamsListA.length }).map((_, index) => {
+            //const player = players[index];
+            const teamOne = leagueSchedule[weekNumber].teamsListA[index];
+            const teamTwo = leagueSchedule[weekNumber].teamsListB[index];
+            return (
+                /*<tr key={`${position}-${index}`}>
+                    <th>{position}</th>
+                    <th>{player ? player.fullName : ""} {updateCounter(position)}</th>
+                </tr>*/
+                <tr key={`${getLeagueName()} - ${weekNumber}`}>
+                    <th>{weekNumber}</th>
+                    <th>{teamOne.teamName}</th>
+                    <th>{teamTwo.teamName}</th>
+                </tr>
+            );
+        });
+    }
+
+    const getLeagueSchedule = () => {
+        return(
+            <table className="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Week Number</th>
+                        <th>Team One</th>
+                        <th>Team Two</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {Object.keys(leagueSchedule).map((weekNumber) => (
+                        getLeagueScheduleHelper(weekNumber)
+                    ))}
+                </tbody>
+            </table>
+        )
+    }
+
 
     return(
         <div>
@@ -96,6 +123,8 @@ const League = () => {
             {commissioner && <button onClick={() => randomizeSchedule()}>randomize schedule</button>}
 
             {commissioner && <button style={{margin: "20px"}} onClick={deleteLeague} type="button" className="btn btn-danger">Delete League</button>}
+
+            {getLeagueSchedule()}
         </div>
     )
 }

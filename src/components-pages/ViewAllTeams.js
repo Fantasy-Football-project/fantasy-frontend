@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import LeagueContentNavbar from "./LeagueContentNavbar";
 import { getLeagueName } from "./AuthContent";
-import { getAuthToken, getUsername, request } from "../axios_helper";
+import { request } from "../axios_helper";
+import { getTeamInfo } from "./Roster";
 
 export const navigateToTradeUI = ( id ) => {
     window.location.href = '/trade-ui';
@@ -11,24 +12,12 @@ export const ViewAllTeams = () => {
     const [allTeams, setAllTeams] = useState({});
     const [numberOfPosition, setNumberOfPosition] = useState({});
     const [startingPlayersByTeam, setStartingPlayersByTeam] = useState({});
-    const [currentTeamId, setCurrentTeamId] = useState();
+    const [currentTeamId, setCurrentTeamId] = useState(getTeamInfo().id);
 
     useEffect(() => {
         findAllTeams();
     }, [])
 
-    useEffect(() => {
-        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`
-
-        request(
-            "GET",
-            queryString
-        ).then((response) => {
-            setCurrentTeamId(response.data.id);
-        }).catch((error) => {
-            console.log(error);
-        })
-    })
     const findAllTeams = () => {
         const queryString = `/get-league?leagueName=${getLeagueName()}`;
 

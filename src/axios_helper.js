@@ -20,7 +20,6 @@ export const setAuthToken = ( token ) => {
     else {
         window.localStorage.removeItem("auth_token")
     }
-    
 }
 
 export const request = (method, url, data) => {

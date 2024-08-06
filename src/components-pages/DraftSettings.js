@@ -3,6 +3,7 @@ import LeagueContentNavbar from "./LeagueContentNavbar";
 import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import { Link } from "react-router-dom";
+import { getTeamInfo } from "./Roster";
 
 export const appendAlert = (message, type) => {
     const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
@@ -29,20 +30,7 @@ export const DraftSettings = () => {
     const [draftDate, setDraftDate] = useState(null);
     const [draftDone, setDraftDone] = useState(false);
 
-    const[commissioner, setCommissioner] = useState();
-
-    useEffect(() => {
-        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
-
-        request(
-            "GET",
-            queryString
-        ).then((response) => {
-            setCommissioner(response.data.commissioner);
-        }).catch((error) => {
-            console.log(error);
-        })
-    })
+    const[commissioner] = useState(getTeamInfo().commissioner);
 
     const randomizeDraftOrder = () => {
         const queryString = `/randomize-draft-order?leagueName=${getLeagueName()}`
@@ -219,5 +207,3 @@ export const DraftSettings = () => {
         </div>
     )
 }
-
-//export default DraftSettings;

@@ -5,6 +5,7 @@ import { getLeagueName } from "./AuthContent";
 import { PastPlayerModal } from "./PastPlayerModal";
 import { AddAndDropPlayer, DropPlayer } from "./AddAndDropPlayer";
 import { appendAlert } from "./DraftSettings";
+import { getTeamInfo, setTeamInfo } from "./Roster";
 
 const Players = () => {
 
@@ -15,9 +16,9 @@ const Players = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [draftDone, setDraftDone] = useState(false);
     const [viewPlayersString, setViewPlayersString] = useState("");
-    const [roster, setRoster] = useState([]);
+    const [roster, setRoster] = useState(getTeamInfo().teamPlayers);
     const [leagueTakenPlayers, setLeagueTakenPlayers] = useState([]);
-    const [sizeOfRoster, setSizeOfRoster] = useState();
+    const [sizeOfRoster, setSizeOfRoster] = useState(getTeamInfo().teamPlayers.length);
     const [maxPlayers, setMaxPlayers] = useState();
     const [playerToAddId, setPlayerToAddId] = useState();
     const [playerToAdd, setPlayerToAdd] = useState();
@@ -35,6 +36,7 @@ const Players = () => {
         ).then((response) => {
             setSizeOfRoster(response.data.teamPlayers.length);
             setRoster(response.data.teamPlayers);
+            setTeamInfo(response.data);
         }).catch((error) => {
             console.log(error);
         })

@@ -3,14 +3,24 @@ import React, { useEffect, useState } from "react";
 import { getLeagueName } from "./AuthContent";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import { useNavigate } from "react-router-dom";
+import { getTeamInfo } from "./Roster";
 
 export const TradeUI = ( teamTwoId ) => {
 
     const [allTeams, setAllTeams] = useState({});
     const [numberOfPosition, setNumberOfPosition] = useState({});
-    const [currentTeamId, setCurrentTeamId] = useState();
+    const [currentTeamId] = useState(getTeamInfo().id);
     const [secondTeamId, setSecondTeamId] = useState();
-    const [teamOne, setTeamOne] = useState({});
+    const [teamOne] = useState({
+        QB: getTeamInfo().startingQB,
+        RB: getTeamInfo().startingRB,
+        WR: getTeamInfo().startingWR,
+        TE: getTeamInfo().startingTE,
+        FLEX: getTeamInfo().startingFLEX,
+        K: getTeamInfo().startingK,
+        DST: getTeamInfo().startingDST,
+        BE: getTeamInfo().bench
+    });
     const [teamTwo, setTeamTwo] = useState({});
     const [selectedRowsTeamOne, setSelectedRowsTeamOne] = useState([]);
     const [selectedRowsTeamTwo, setSelectedRowsTeamTwo] = useState([]);
@@ -22,29 +32,6 @@ export const TradeUI = ( teamTwoId ) => {
 
     useEffect(() => {
         findAllTeams();
-    }, [])
-
-    useEffect(() => {
-        const queryString = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`
-
-        request(
-            "GET",
-            queryString
-        ).then((response) => {
-            setCurrentTeamId(response.data.id);
-            setTeamOne({
-                QB: response.data.startingQB,
-                RB: response.data.startingRB,
-                WR: response.data.startingWR,
-                TE: response.data.startingTE,
-                FLEX: response.data.startingFLEX,
-                K: response.data.startingK,
-                DST: response.data.startingDST,
-                BE: response.data.bench
-            })
-        }).catch((error) => {
-            console.log(error);
-        })
     }, [])
 
     const findAllTeams = () => {
@@ -307,9 +294,9 @@ export const TradeUI = ( teamTwoId ) => {
 
                     {(Object.keys(teamOnePlayersOffered) > 0 || Object.keys(teamTwoPlayersOffered) > 0) && secondTeamId &&
                         <button onClick={() => navigateToTradeReview()}>
-                            review pt 2
-                    </button>}
-                    
+                            Review Trade
+                        </button>
+                    }
                 </div>
             </div>
         </div>

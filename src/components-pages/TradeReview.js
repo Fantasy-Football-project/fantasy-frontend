@@ -5,12 +5,13 @@ import { getAuthToken, getUsername, request } from "../axios_helper";
 import { navigateToTradeUI } from "./ViewAllTeams";
 import { getLeagueName } from "./AuthContent";
 import { appendAlert } from "./DraftSettings";
+import { getTeamInfo } from "./Roster";
 
 export const TradeReview = () => {
 
     const location = useLocation();
     const { secondTeamId, fromTeamOne, fromTeamTwo } = location.state || {};
-    const [teamOneInfo, setTeamOneInfo] = useState();
+    const [teamOneInfo, setTeamOneInfo] = useState(getTeamInfo());
     const [teamTwoInfo, setTeamTwoInfo] = useState();
 
     useEffect(() => {
@@ -21,17 +22,6 @@ export const TradeReview = () => {
             queryString
         ).then((response) => {
             setTeamTwoInfo(response.data);
-        }).catch((error) => {
-            console.log(error);
-        })
-
-        const queryString2 = `/get-team?leagueName=${getLeagueName()}&username=${getUsername(getAuthToken())}`;
-
-        request(
-            "GET",
-            queryString2
-        ).then((response) => {
-            setTeamOneInfo(response.data);
         }).catch((error) => {
             console.log(error);
         })

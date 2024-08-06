@@ -4,9 +4,9 @@
 import React , { useState, useEffect } from "react";
 import { getAuthToken, getUsername, request } from "../axios_helper";
 import { Link, Route, Routes } from "react-router-dom";
-import { Button, Popover, OverlayTrigger } from 'react-bootstrap';
 import Navbar from "./AuthNavbar";
 import { setAuthToken } from "../axios_helper";
+import { setTeamInfo } from "./Roster";
 
 let leagueName = "";
 
@@ -50,6 +50,7 @@ const AuthContent = () => {
     }
 
     useEffect(() => {
+        setTeamInfo(null);
         {data.map((league) => (
             <div>
                 {getTeamName(league.leagueName, league.id)}
