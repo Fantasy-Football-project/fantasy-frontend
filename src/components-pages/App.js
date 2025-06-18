@@ -47,24 +47,27 @@ function App() {
 
   //Calling the login function in the backend.
   const onLogin = (event, username, password) => {
-    event.preventDefault();
+		async function callOnLogin() {
+			event.preventDefault();
 
-    //using the axios helper method - .then/.catch is a try catch
-    request(
-      "POST",
-      "/login",
-      {login: username, password: password}
-    ).then((response) => {
-      setAuthToken(response.data.token);
-      console.log('Login successful, response:', response);
-      setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
-      navigate("/authorizedContent");
-    }).catch((error) => {
-      setAuthToken(null);
-      console.error('Login error:', error);
-			alert(error)
-      setComponentToShow("welcome");
-    });
+			//using the axios helper method - .then/.catch is a try catch
+			request(
+				"POST",
+				"/login",
+				{login: username, password: password}
+			).then((response) => {
+				setAuthToken(response.data.token);
+				console.log('Login successful, response:', response);
+				setComponentToShow("authorizedContent"); //on login, the user will view the authorized content
+				navigate("/authorizedContent");
+			}).catch((error) => {
+				setAuthToken(null);
+				console.error('Login error:', error);
+				alert(error)
+				setComponentToShow("welcome");
+			});	
+		}
+		callOnLogin();
   };
 
   const onRegister = (event, firstName, lastName, username, password) => {
