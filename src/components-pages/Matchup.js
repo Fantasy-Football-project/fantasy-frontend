@@ -4,7 +4,11 @@ import { getLeagueInfo, getTeamInfo } from "./Roster";
 import { request } from "../axios_helper";
 
 const Matchup = () => {
-    const [currentWeekNumber] = useState(getLeagueInfo().currentWeekNumber)
+    const [currentWeekNumber] = useState(getLeagueInfo().currentWeekNumber);
+		const [numWeeks] = useState(getLeagueInfo().regularSeasonGames);
+		const [selectedWeek, setSelectedWeek] = useState(currentWeekNumber);
+		const [yourPoints, setYourPoints] = useState(getTeamInfo().scoreByWeek[selectedWeek]);
+		const [opponentPoints, setOpponentPoints] = useState();
     const [numberOfPosition] = useState({
         QB: getLeagueInfo().numberOfStarters.QB,
         RB: getLeagueInfo().numberOfStarters.RB,
@@ -30,18 +34,26 @@ const Matchup = () => {
     const [opponentNumberOfPosition, setOpponentNumberOfPosition] = useState({});
 
     useEffect(() => {
+				setYourPoints(getTeamInfo().scoreByWeek[selectedWeek]);
         const queryString = `/get-opponents-for-team?teamId=${getTeamInfo().id}`;
         
         request(
             "GET",
             queryString
         ).then((response) => {
-            const queryString2 = `/get-team-by-id?teamId=${response.data[currentWeekNumber].id}`;
+            const queryString2 = `/get-team-by-id?teamId=${response.data[selectedWeek].id}`;
         
             request(
                 "GET",
                 queryString2
             ).then((response) => {
+								if (response.data.scoreByWeek[selectedWeek]) {
+									setOpponentPoints(response.data.scoreByWeek[selectedWeek])
+								}
+								else {
+									setOpponentPoints(0)
+								}
+								
                 setOpponentTeam({
                     QB: response.data.startingQB,
                     RB: response.data.startingRB,
@@ -173,11 +185,24 @@ const Matchup = () => {
         <div>
             <LeagueContentNavbar />
 
+						<div>
+								<select id="selected_week" name="Week" className="form-control" onChange={(e) => setSelectedWeek(parseInt(e.target.value, 10))}>
+									{Array.from({ length: numWeeks }, (_, i) => (
+											<option key={i + 1} value={i + 1}>
+													Week {i + 1}
+											</option>
+									))}
+								</select>
+						</div>
+
             <h5>
-                Week: {currentWeekNumber}
+                Current Week: {currentWeekNumber}
+            </h5>
+						<h5>
+                Week That is Being Viewed: {selectedWeek}
             </h5>
 
-            <div className="container">
+            {selectedWeek >= currentWeekNumber && <div className="container">
                 <div className="row">
                     <div className="col-6">
                         {yourTeam()}
@@ -186,7 +211,17 @@ const Matchup = () => {
                         {renderOpponentTeam()}
                     </div>
                 </div>
-            </div>
+            </div>}
+
+						{selectedWeek < currentWeekNumber && <div className="container">
+                <h1>
+									Your Points This Week: {yourPoints}
+								</h1>
+
+								<h1>
+									Opponent Points This Week: {opponentPoints}
+								</h1>
+            </div>}
             
         </div>
     )

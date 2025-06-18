@@ -10,6 +10,7 @@ export const getAuthToken = () => {
 }
 
 export const getUsername = ( token ) => {
+		console.log(jwtDecode(token).iss)
     return jwtDecode(token).iss;
 }
 

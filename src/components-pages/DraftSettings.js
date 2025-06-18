@@ -140,6 +140,7 @@ export const DraftSettings = () => {
                             <div id="liveAlertPlaceholder"></div>
                             <h1>Month</h1>
                             <select id="month" name="month" className="form-control">
+																<option value="June">June</option>
                                 <option value="July">July</option>
                                 <option value="August">August</option>
                                 <option value="September">September</option>
@@ -191,6 +192,7 @@ export const DraftSettings = () => {
                                 <option value="21:00">9:00 PM</option>
                                 <option value="22:00">10:00 PM</option>
                                 <option value="23:00">11:00 PM</option>
+																<option value="22:10">10:10 PM</option>
                             </select>
                             
                             <button 

@@ -2,6 +2,7 @@
 import React , { useState, useEffect } from "react";
 
 const LoginForm = ( props ) => {
+		const [error, setError] = useState("");
     const [active, setActive] = useState("login");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");

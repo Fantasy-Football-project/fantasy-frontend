@@ -9,6 +9,7 @@ const DraftUI = () => {
     const [teamName, setTeamName] = useState();
     const [queueList, setQueueList] = useState([]);
     const [draftOrder, setDraftOrder] = useState([]);
+		const [test, setTest] = useState({});
 
     const getAvailablePlayers = () => {
         const queryString = `/all-available-players?leagueName=${getLeagueName()}`
@@ -35,6 +36,7 @@ const DraftUI = () => {
             setIsDraftTurn(response.data.isDraftTurn);
             setQueueList(response.data.queueList);
             console.log(response.data);
+						setTest(response.data)
         }).catch((error) => {
             console.log(error);
         })
@@ -44,6 +46,7 @@ const DraftUI = () => {
         getAvailablePlayers();
         getTeamInfo();
         getDraftOrder();
+				console.log(test)
     }, [])
 
     const draftPlayer = ( playerName ) => {

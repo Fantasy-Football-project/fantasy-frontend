@@ -34,6 +34,7 @@ const AuthContent = () => {
 
     const getTeamName = ( leagueName, leagueID ) => {
         const querystring = `/get-team?leagueName=${leagueName}&username=${getUsername(getAuthToken())}`;
+				console.log(querystring)
         request(
             "GET", // Get request
             querystring, 

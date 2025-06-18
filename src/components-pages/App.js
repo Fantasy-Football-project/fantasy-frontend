@@ -62,6 +62,7 @@ function App() {
     }).catch((error) => {
       setAuthToken(null);
       console.error('Login error:', error);
+			alert(error)
       setComponentToShow("welcome");
     });
   };
@@ -82,6 +83,7 @@ function App() {
     }).catch((error) => {
       setAuthToken(null);
       console.error(error.response.data)
+			alert(error);
     });
   };
   
